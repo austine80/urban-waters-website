@@ -4,99 +4,173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Waters- Purified drinking water</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Urban Waters – Purified Drinking Water</title>
+
+    <!-- Preconnect for speed -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Critical font only -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide icons (defer) -->
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        poppins: ['Poppins', 'sans-serif'],
-                    },
+                    fontFamily: { poppins: ['Poppins', 'sans-serif'] },
                     colors: {
-                        primary: {
-                            50: '#f0f9ff',
-                            100: '#e0f2fe',
-                            200: '#bae6fd',
-                            300: '#7dd3fc',
-                            400: '#38bdf8',
-                            500: '#0ea5e9',
-                            600: '#0284c7',
-                            700: '#0369a1',
-                            800: '#075985',
-                            900: '#0c4a6e',
-                        },
-                        aqua: {
-                            50: '#ecfeff',
-                            100: '#cffafe',
-                            200: '#a5f3fc',
-                            300: '#67e8f9',
-                            400: '#22d3ee',
-                            500: '#06b6d4',
-                            600: '#0891b2',
-                            700: '#0e7490',
-                            800: '#155e75',
-                            900: '#164e63',
-                        }
-                    },
-                    animation: {
-                        'float': 'float 3s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s ease-in-out infinite',
-                        'slide-up': 'slideUp 0.6s ease-out',
-                        'fade-in': 'fadeIn 0.5s ease-out',
-                        'counter': 'counter 2s ease-out',
-                    },
-                    keyframes: {
-                        float: {
-                            '0%, 100%': { transform: 'translateY(0)' },
-                            '50%': { transform: 'translateY(-10px)' },
-                        },
-                        slideUp: {
-                            '0%': { opacity: '0', transform: 'translateY(30px)' },
-                            '100%': { opacity: '1', transform: 'translateY(0)' },
-                        },
-                        fadeIn: {
-                            '0%': { opacity: '0' },
-                            '100%': { opacity: '1' },
-                        },
+                        primary: { 50: '#f0f9ff', 100: '#e0f2fe', 200: '#bae6fd', 300: '#7dd3fc', 400: '#38bdf8', 500: '#0ea5e9', 600: '#0284c7', 700: '#0369a1', 800: '#075985', 900: '#0c4a6e' },
+                        aqua: { 50: '#ecfeff', 100: '#cffafe', 200: '#a5f3fc', 300: '#67e8f9', 400: '#22d3ee', 500: '#06b6d4', 600: '#0891b2', 700: '#0e7490', 800: '#155e75', 900: '#164e63' }
                     }
                 }
             }
         }
     </script>
+
     <style>
         * {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Poppins', sans-serif
         }
 
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+        /* ── WATER DROPLET CANVAS ── */
+        #dropletCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
 
-        .water-gradient {
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #22d3ee 100%);
+        /* ── CAROUSEL – fills container perfectly ── */
+        .hero-wrap {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            min-height: 600px;
+            overflow: hidden;
         }
 
-        .hero-slide {
+        .slide {
             position: absolute;
             inset: 0;
             opacity: 0;
-            transition: opacity 1s ease-in-out;
+            transition: opacity 1s ease;
+            will-change: opacity;
         }
 
-        .hero-slide.active {
+        .slide.active {
+            opacity: 1
+        }
+
+        /* media fills slide */
+        .slide-media {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            /* lazy-load via JS */
+        }
+
+        .slide-overlay {
+            position: absolute;
+            inset: 0;
+        }
+
+        .slide-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            height: 100%;
+            padding: 0 1.5rem;
+        }
+
+        /* ── NAV ── */
+        #navbar {
+            transition: background .3s, box-shadow .3s
+        }
+
+        .nav-scrolled {
+            background: rgba(255, 255, 255, .95) !important;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, .1)
+        }
+
+        /* ── GENERAL ── */
+        .water-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #22d3ee 100%)
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, .12);
+            backdrop-filter: blur(10px)
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            transition: transform .25s, box-shadow .25s
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, .4)
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(6, 182, 212, .15)
+        }
+
+        .product-card {
+            transition: all .3s
+        }
+
+        .branch-card {
+            transition: all .3s
+        }
+
+        .branch-card:hover {
+            transform: scale(1.02);
+            border-color: #06b6d4
+        }
+
+        .service-icon {
+            transition: all .3s
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1) rotate(5deg)
+        }
+
+        .testimonial-card {
+            transition: all .3s
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-5px)
+        }
+
+        .scroll-reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity .55s ease, transform .55s ease
+        }
+
+        .scroll-reveal.revealed {
             opacity: 1;
-        }
-
-        .counter-value {
-            font-variant-numeric: tabular-nums;
+            transform: translateY(0)
         }
 
         .wave-bottom {
@@ -106,68 +180,18 @@
             width: 100%;
             overflow: hidden;
             line-height: 0;
+            z-index: 3
         }
 
         .wave-bottom svg {
-            position: relative;
             display: block;
             width: calc(100% + 1.3px);
-            height: 60px;
-        }
-
-        .product-card {
-            transition: all 0.3s ease;
-        }
-
-        .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(6, 182, 212, 0.15);
-        }
-
-        .service-icon {
-            transition: all 0.3s ease;
-        }
-
-        .service-card:hover .service-icon {
-            transform: scale(1.1) rotate(5deg);
-        }
-
-        .branch-card {
-            transition: all 0.3s ease;
-        }
-
-        .branch-card:hover {
-            transform: scale(1.02);
-            border-color: #06b6d4;
-        }
-
-        .testimonial-card {
-            transition: all 0.3s ease;
-        }
-
-        .testimonial-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .nav-scrolled {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
-            transition: all 0.3s ease;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(6, 182, 212, 0.4);
+            height: 50px
         }
 
         .ripple {
             position: relative;
-            overflow: hidden;
+            overflow: hidden
         }
 
         .ripple::after {
@@ -177,702 +201,581 @@
             left: 50%;
             width: 0;
             height: 0;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, .3);
             border-radius: 50%;
             transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
+            transition: width .55s, height .55s
         }
 
         .ripple:active::after {
             width: 300px;
-            height: 300px;
+            height: 300px
         }
 
-        .scroll-reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.6s ease-out;
-        }
-
-        .scroll-reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .whatsapp-float {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
+        @keyframes waPulse {
 
             0%,
             100% {
-                transform: scale(1);
+                transform: scale(1)
             }
 
             50% {
-                transform: scale(1.1);
+                transform: scale(1.1)
+            }
+        }
+
+        .whatsapp-float {
+            animation: waPulse 2s infinite
+        }
+
+        /* ── SLIDE DOTS ── */
+        .slide-dot {
+            width: .75rem;
+            height: .75rem;
+            border-radius: 9999px;
+            background: rgba(255, 255, 255, .45);
+            transition: background .3s, transform .3s;
+            border: none;
+            cursor: pointer
+        }
+
+        .slide-dot.active {
+            background: #fff;
+            transform: scale(1.3)
+        }
+
+        /* counter */
+        .counter-value {
+            font-variant-numeric: tabular-nums
+        }
+
+        /* ── RESPONSIVE VIDEO/IMG ── */
+        @media(max-width:640px) {
+            .slide-content .max-w-2xl h1 {
+                font-size: 2.5rem !important;
+                line-height: 1.15
+            }
+
+            .slide-content .max-w-2xl p {
+                font-size: 1rem !important
+            }
+
+            .slide-content {
+                padding: 0 1rem
+            }
+        }
+
+        @media(max-width:400px) {
+            .slide-content .max-w-2xl h1 {
+                font-size: 2rem !important
             }
         }
     </style>
 </head>
 
-<body class="bg-slate-50 text-slate-800 overflow-x-hidden">
+<body class="bg-slate-80 text-slate-800 overflow-x-hidden">
 
-    <!-- Navigation -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 py-4">
+    <!-- ░░ DROPLET CANVAS (behind everything) ░░ -->
+    <canvas id="dropletCanvas" aria-hidden="true"></canvas>
+
+    <!-- ░░ NAV ░░ -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
                 <a href="#home" class="flex items-center gap-3 group">
-                    <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg">
-                        <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover">
+                    <div class="w-14 h-14 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                        <img src="logo.jpg" alt="Urban Waters Logo" class="w-full h-full object-cover" loading="lazy"
+                            width="56" height="56">
                     </div>
                     <div>
-                        <h1 class="text-xl font-bold text-slate-900 group-hover:text-primary-600 transition-colors">
+                        <h1
+                            class="text-xl font-bold text-black group-hover:text-aqua-300 transition-colors drop-shadow">
                             Urban Waters</h1>
-                        <p class="text-xs text-slate-900">Purified drinking water</p>
+                        <p class="text-xs text-black/80 drop-shadow">Purified drinking water</p>
                     </div>
                 </a>
 
-                <!-- Desktop Menu -->
-                <div class="hidden lg:flex items-center gap-8">
-                    <a href="#home" class="text-slate-900 hover:text-primary-600 font-medium transition-colors">Home</a>
+                <div class="hidden lg:flex items-center gap-7">
+                    <a href="#home"
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Home</a>
                     <a href="#products"
-                        class="text-slate-900 hover:text-primary-600 font-medium transition-colors">Products</a>
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Products</a>
                     <a href="#services"
-                        class="text-slate-900 hover:text-primary-600 font-medium transition-colors">Services</a>
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Services</a>
                     <a href="#branches"
-                        class="text-slate-900 hover:text-primary-600 font-medium transition-colors">Branches</a>
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Branches</a>
                     <a href="#about"
-                        class="text-slate-900 hover:text-primary-600 font-medium transition-colors">About</a>
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">About</a>
                     <a href="#contact"
-                        class="text-slate-900 hover:text-primary-600 font-medium transition-colors">Contact</a>
+                        class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Contact</a>
                 </div>
 
-                <!-- CTA Buttons -->
                 <div class="hidden lg:flex items-center gap-4">
-                    <a href="https://wa.me/254712345678" target="_blank"
-                        class="flex items-center gap-2 text-slate-900 hover:text-green-600 font-medium transition-colors">
-                        <i data-lucide="message-circle" class="w-5 h-5"></i>
-                        <span>WhatsApp</span>
+                    <a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+                        class="flex items-center gap-2 text-slate-800 hover:text-green-300 font-medium transition-colors drop-shadow">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i><span>WhatsApp</span>
                     </a>
                     <button onclick="openOrderModal()"
-                        class="btn-primary text-white px-6 py-3 rounded-full font-semibold ripple">
-                        Order Now
-                    </button>
+                        class="btn-primary text-white px-6 py-3 rounded-full font-semibold ripple">Order Now</button>
                 </div>
 
-                <!-- Mobile Menu Button -->
-                <button id="mobileMenuBtn" class="lg:hidden p-2 text-slate-600">
+                <button id="mobileMenuBtn" class="lg:hidden p-2 text-white">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile Menu -->
         <div id="mobileMenu" class="hidden lg:hidden bg-white shadow-lg mt-4 mx-4 rounded-2xl overflow-hidden">
-            <div class="p-6 space-y-4">
-                <a href="#home" class="block text-slate-600 hover:text-primary-600 font-medium py-2">Home</a>
-                <a href="#products" class="block text-slate-600 hover:text-primary-600 font-medium py-2">Products</a>
-                <a href="#services" class="block text-slate-600 hover:text-primary-600 font-medium py-2">Services</a>
-                <a href="#branches" class="block text-slate-600 hover:text-primary-600 font-medium py-2">Branches</a>
-                <a href="#about" class="block text-slate-600 hover:text-primary-600 font-medium py-2">About</a>
-                <a href="#contact" class="block text-slate-600 hover:text-primary-600 font-medium py-2">Contact</a>
+            <div class="p-6 space-y-3">
+                <a href="#home" class="block text-slate-700 hover:text-primary-600 font-medium py-2">Home</a>
+                <a href="#products" class="block text-slate-700 hover:text-primary-600 font-medium py-2">Products</a>
+                <a href="#services" class="block text-slate-700 hover:text-primary-600 font-medium py-2">Services</a>
+                <a href="#branches" class="block text-slate-700 hover:text-primary-600 font-medium py-2">Branches</a>
+                <a href="#about" class="block text-slate-700 hover:text-primary-600 font-medium py-2">About</a>
+                <a href="#contact" class="block text-slate-700 hover:text-primary-600 font-medium py-2">Contact</a>
                 <button onclick="openOrderModal()"
-                    class="w-full btn-primary text-white px-6 py-3 rounded-full font-semibold mt-4">
-                    Order Now
-                </button>
+                    class="w-full btn-primary text-white px-6 py-3 rounded-full font-semibold mt-2">Order Now</button>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
-    <section id="home" class="relative h-screen min-h-[700px] overflow-hidden">
-        <!-- Slides -->
-        <div id="heroSlides" class="absolute inset-0">
-            <!-- Slide 1: Water Purity -->
-            <div class="hero-slide active">
-                <div class="absolute inset-0 aspect-video overflow-hidden">
-                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                        <source src="Water flowing video (No Audio).mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="absolute inset-0 z-20 flex items-center">
-                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-2xl">
-                            <span
-                                class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                                💧 Pure & Refreshing
-                            </span>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                                Crystal Clear<br>
-                                <span class="text-aqua-300">Purity</span>
-                            </h1>
-                            <p class="text-xl text-slate-900 mb-8 max-w-lg">
-                                Experience water in its purest form. Our advanced purification systems deliver unmatched
-                                quality.
-                            </p>
-                            <div class="flex flex-wrap gap-4">
-                                <button onclick="openOrderModal()"
-                                    class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">
-                                    Order Now
-                                </button>
-                                <a href="#branches"
-                                    class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">
-                                    Find a Branch
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <!-- ░░ HERO CAROUSEL ░░ -->
+    <section id="home" class="hero-wrap">
 
-            <!-- Slide 2: Refill Services -->
-            <div class="hero-slide">
-                <img src="Lady car.jpg" alt="Water refill station" class="w-full h-full object-cover">
-                <div class="absolute inset-0 z-20 flex items-center">
-                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-2xl">
-                            <span
-                                class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                                🔄 Eco-Friendly Refills
-                            </span>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                                Smart Water<br>
-                                <span class="text-aqua-300">Refills</span>
-                            </h1>
-                            <p class="text-xl text-slate-100 mb-8 max-w-lg">
-                                Bring your containers and refill with pure, filtered water. Save money and the
-                                environment.
-                            </p>
-                            <div class="flex flex-wrap gap-4">
-                                <button onclick="openOrderModal()"
-                                    class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">
-                                    Order Now
-                                </button>
-                                <a href="#services"
-                                    class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">
-                                    Our Services
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 3: Bottled Products -->
-            <div class="hero-slide">
-                <div class="absolute inset-0 aspect-video overflow-hidden">
-                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                        <source src="FREEDIO_ _Water pouring into glass slow motion_ royalty free HD stock video footage.mp4" type="video/mp4">
-                    </video>
-                </div>
-                <div class="absolute inset-0 z-20 flex items-center">
-                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-2xl">
-                            <span
-                                class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                                🍶 Premium taste
-                            </span>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                                Premium<br>
-                                <span class="text-aqua-300">Purified Water</span>
-                            </h1>
-                            <p class="text-xl text-slate-100 mb-8 max-w-lg">
-                                From 300ml to 20L, find the perfect size for every occasion. Quality you can taste.
-                            </p>
-                            <div class="flex flex-wrap gap-4">
-                                <button onclick="openOrderModal()"
-                                    class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">
-                                    Order Now
-                                </button>
-                                <a href="#products"
-                                    class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">
-                                    View Products
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 4: Delivery Coverage -->
-            <div class="hero-slide">
-                <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                    <source src="Man delivery.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 z-20 flex items-center">
-                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-2xl">
-                            <span
-                                class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                                🚚 Fast Delivery
-                            </span>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                                City-Wide<br>
-                                <span class="text-aqua-300">Coverage</span>
-                            </h1>
-                            <p class="text-xl text-slate-100 mb-8 max-w-lg">
-                                11 branches in Nairobi, serving 3 major cities. Fresh water delivered to your doorstep.
-                            </p>
-                            <div class="flex flex-wrap gap-4">
-                                <button onclick="openOrderModal()"
-                                    class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">
-                                    Order Now
-                                </button>
-                                <a href="#branches"
-                                    class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">
-                                    Our Locations
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Slide 5: Customer Lifestyle -->
-            <div class="hero-slide">
-                <video autoplay muted loop playsinline class="w-full h-full object-cover">
-                    <source src="People drinking.mp4" type="video/mp4">
-                </video>
-                <div class="absolute inset-0 z-20 flex items-center">
-                    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
-                        <div class="max-w-2xl">
-                            <span
-                                class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-300 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
-                                ❤️ Trusted by Thousands
-                            </span>
-                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
-                                Happy<br>
-                                <span class="text-aqua-300">Customers</span>
-                            </h1>
-                            <p class="text-xl text-slate-100 mb-8 max-w-lg">
-                                Join 10,000+ satisfied customers who trust Crystal Springs for their daily hydration
-                                needs.
-                            </p>
-                            <div class="flex flex-wrap gap-4">
-                                <button onclick="openOrderModal()"
-                                    class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">
-                                    Order Now
-                                </button>
-                                <a href="#testimonials"
-                                    class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">
-                                    Read Reviews
-                                </a>
-                            </div>
+        <!-- Slide 1 – Water flowing video -->
+        <div class="slide active" id="slide-0">
+            <video class="slide-media" autoplay muted loop playsinline preload="auto" poster="lady car.jpg">
+                <source src="Water flowing video (No Audio).mp4" type="video/mp4">
+            </video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="container mx-auto">
+                    <div class="max-w-2xl">
+                        <span
+                            class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-200 rounded-full text-sm font-medium mb-5 backdrop-blur-sm">💧
+                            Pure &amp; Refreshing</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight">Crystal
+                            Clear<br><span class="text-aqua-300">Purity</span></h1>
+                        <p class="text-lg md:text-xl text-white/85 mb-8 max-w-lg">Experience water in its purest form.
+                            Our advanced purification systems deliver unmatched quality.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openOrderModal()"
+                                class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
+                                Now</button>
+                            <a href="#branches"
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">Find
+                                a Branch</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Slide Indicators -->
-        <div class="absolute bottom-32 left-1/2 transform -translate-x-1/2 z-30 flex gap-3">
-            <button onclick="goToSlide(0)"
-                class="slide-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all active"></button>
-            <button onclick="goToSlide(1)"
-                class="slide-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"></button>
-            <button onclick="goToSlide(2)"
-                class="slide-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"></button>
-            <button onclick="goToSlide(3)"
-                class="slide-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"></button>
-            <button onclick="goToSlide(4)"
-                class="slide-dot w-3 h-3 rounded-full bg-white/50 hover:bg-white transition-all"></button>
+        <!-- Slide 2 – Lady car image -->
+        <div class="slide" id="slide-1">
+            <img class="slide-media" src="Lady car.jpg" alt="Water refill station" loading="lazy">
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="container mx-auto">
+                    <div class="max-w-2xl">
+                        <span
+                            class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-200 rounded-full text-sm font-medium mb-5 backdrop-blur-sm">🔄
+                            Eco-Friendly Refills</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight">Smart
+                            Water<br><span class="text-aqua-300">Refills</span></h1>
+                        <p class="text-lg md:text-xl text-white/85 mb-8 max-w-lg">Bring your containers and refill with
+                            pure, filtered water. Save money and the environment.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openOrderModal()"
+                                class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
+                                Now</button>
+                            <a href="#services"
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">Our
+                                Services</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Wave Bottom -->
-        <div class="wave-bottom z-30">
-            <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+        <!-- Slide 3 – Water pouring video -->
+        <div class="slide" id="slide-2">
+            <video class="slide-media" muted loop playsinline preload="none" poster="20L.JPG">
+                <source src="FREEDIO_ _Water pouring into glass slow motion_ royalty free HD stock video footage.mp4"
+                    type="video/mp4">
+            </video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="container mx-auto">
+                    <div class="max-w-2xl">
+                        <span
+                            class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-200 rounded-full text-sm font-medium mb-5 backdrop-blur-sm">🍶
+                            Premium Taste</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-slate-800 mb-5 leading-tight">
+                            Premium<br><span class="text-aqua-300">Purified Water</span></h1>
+                        <p class="text-lg md:text-xl text-black/85 mb-8 max-w-lg">From 300ml to 20L, find the perfect
+                            size for every occasion. Quality you can taste.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openOrderModal()"
+                                class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
+                                Now</button>
+                            <a href="#products"
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">View
+                                Products</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4 – Man delivery video -->
+        <div class="slide" id="slide-3">
+            <video class="slide-media" muted loop playsinline preload="none" poster="man on bycycle.JPG">
+                <source src="Man delivery.mp4" type="video/mp4">
+            </video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="container mx-auto">
+                    <div class="max-w-2xl">
+                        <span
+                            class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-200 rounded-full text-sm font-medium mb-5 backdrop-blur-sm">🚚
+                            Fast Delivery</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight">
+                            City-Wide<br><span class="text-aqua-300">Coverage</span></h1>
+                        <p class="text-lg md:text-xl text-white/85 mb-8 max-w-lg">11+ Independent branches in Nairobi, serving 3
+                            major cities in Kenya. Fresh water delivered to your doorstep.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openOrderModal()"
+                                class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
+                                Now</button>
+                            <a href="#branches"
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">Our
+                                Locations</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5 – People drinking video -->
+        <div class="slide" id="slide-4">
+            <video class="slide-media" muted loop playsinline preload="none" poster="event.JPG">
+                <source src="People drinking.mp4" type="video/mp4">
+            </video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="container mx-auto">
+                    <div class="max-w-2xl">
+                        <span
+                            class="inline-block px-4 py-2 bg-aqua-400/20 text-aqua-200 rounded-full text-sm font-medium mb-5 backdrop-blur-sm">❤️
+                            Trusted by Thousands</span>
+                        <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight">
+                            Happy<br><span class="text-aqua-300">Customers</span></h1>
+                        <p class="text-lg md:text-xl text-white/85 mb-8 max-w-lg">Join 10,000+ satisfied customers who
+                            trust Urban Waters for their daily hydration needs.</p>
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="openOrderModal()"
+                                class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
+                                Now</button>
+                            <a href="#testimonials"
+                                class="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-white/20 transition-all border border-white/30">Read
+                                Reviews</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dots -->
+        <div class="absolute bottom-28 left-1/2 -translate-x-1/2 z-10 flex gap-3" id="slideDots">
+            <button class="slide-dot active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
+            <button class="slide-dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
+            <button class="slide-dot" onclick="goToSlide(2)" aria-label="Slide 3"></button>
+            <button class="slide-dot" onclick="goToSlide(3)" aria-label="Slide 4"></button>
+            <button class="slide-dot" onclick="goToSlide(4)" aria-label="Slide 5"></button>
+        </div>
+
+        <!-- Wave -->
+        <div class="wave-bottom">
+            <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
                 <path
-                    d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z"
+                    d="M321.39,28c58-5.4,114.16-15.1,172-20.9C575.79,-.6,661.59,-.1,743.85,7.8 C823.78,15.5,906.67,36,985.66,46.4c70.05,9.2,146.53,13,214.34,1.5V0H0V13.7A600.21,600.21,0,0,0,321.39,28Z"
                     fill="#f8fafc"></path>
             </svg>
         </div>
     </section>
 
-    <!-- Stats Counter Section -->
-    <section class="py-20 bg-slate-50">
+    <!-- ░░ STATS ░░ -->
+    <section class="py-20 bg-slate-50 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="text-center scroll-reveal">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="map-pin" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
-                        <span class="counter-value" data-target="11">0</span>+
-                    </div>
+                        <i data-lucide="map-pin" class="w-8 h-8 text-white"></i></div>
+                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
+                            data-target="11">0</span>+</div>
                     <p class="text-slate-600 font-medium">Branches in Nairobi</p>
                 </div>
-                <div class="text-center scroll-reveal" style="transition-delay: 0.1s">
+                <div class="text-center scroll-reveal" style="transition-delay:.1s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="building-2" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
-                        <span class="counter-value" data-target="3">0</span>
-                    </div>
+                        <i data-lucide="building-2" class="w-8 h-8 text-white"></i></div>
+                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
+                            data-target="3">0</span></div>
                     <p class="text-slate-600 font-medium">Major Cities Covered</p>
                 </div>
-                <div class="text-center scroll-reveal" style="transition-delay: 0.2s">
+                <div class="text-center scroll-reveal" style="transition-delay:.2s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="users" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
-                        <span class="counter-value" data-target="10000">0</span>+
-                    </div>
+                        <i data-lucide="users" class="w-8 h-8 text-white"></i></div>
+                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
+                            data-target="10000">0</span>+</div>
                     <p class="text-slate-600 font-medium">Happy Customers</p>
                 </div>
-                <div class="text-center scroll-reveal" style="transition-delay: 0.3s">
+                <div class="text-center scroll-reveal" style="transition-delay:.3s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="droplet" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2">
-                        <span class="counter-value" data-target="50000">0</span>+
-                    </div>
+                        <i data-lucide="droplet" class="w-8 h-8 text-white"></i></div>
+                    <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
+                            data-target="50000">0</span>+</div>
                     <p class="text-slate-600 font-medium">Litres Monthly</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Products Section -->
-    <section id="products" class="py-20 bg-white">
+    <!-- ░░ PRODUCTS ░░ -->
+    <section id="products" class="py-20 bg-white relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
                 <span
-                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
-                    Our Products
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-                    Water Solutions for <span class="text-primary-600">Every Need</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    From daily hydration to bulk supply, we have the perfect water solution for you.
-                </p>
+                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">Our
+                    Products</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Water Solutions for <span
+                        class="text-primary-600">Every Need</span></h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">From daily hydration to bulk supply, we have the
+                    perfect water solution for you.</p>
             </div>
 
-            <!-- Refill Services -->
-            <div class="mb-16">
-                <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal">
-                    <i data-lucide="refresh-cw" class="w-6 h-6 text-primary-600"></i>
-                    Water Refill Services
-                </h3>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="man on bycycle.JPG" alt="5L Refill"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <!-- GRADIENT OVERLAY -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <!-- PRICE BADGE -->
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-primary-600">KSh 100</span>
-                                <span class="text-xs text-slate-500">/refill</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">5L Refill</h4>
-                            <p class="text-slate-600 mb-5">Perfect for small families and personal use</p>
-
-                            <button onclick="openOrderModal('5L Refill')"
-                                class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+            <!-- Refills -->
+            <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal"><i
+                    data-lucide="refresh-cw" class="w-6 h-6 text-primary-600"></i> Water Refill Services</h3>
+            <div class="grid md:grid-cols-3 gap-8 mb-16">
+                <!-- 5L -->
+                <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="man on bycycle.JPG" alt="5L Refill"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-primary-600">KSh 100</span><span
+                                class="text-xs text-slate-500">/refill</span></div>
                     </div>
-                    <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="man relaxing.JPG" alt="10L Refill"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <!-- GRADIENT OVERLAY -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <!-- PRICE BADGE -->
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-primary-600">KSh 180</span>
-                                <span class="text-xs text-slate-500">/refill</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">10L Refill</h4>
-                            <p class="text-slate-600 mb-5">Ideal for medium-sized families</p>
-
-                            <button onclick="openOrderModal('10L Refill')"
-                                class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">5L Refill</h4>
+                        <p class="text-slate-600 mb-5">Perfect for small families and personal use</p><button
+                            onclick="openOrderModal('5L Refill')"
+                            class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
+                            Now</button>
                     </div>
+                </div>
+                <!-- 10L -->
+                <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="man relaxing.JPG" alt="10L Refill"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-primary-600">KSh 180</span><span
+                                class="text-xs text-slate-500">/refill</span></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">10L Refill</h4>
+                        <p class="text-slate-600 mb-5">Ideal for medium-sized families</p><button
+                            onclick="openOrderModal('10L Refill')"
+                            class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
+                            Now</button>
+                    </div>
+                </div>
+                <!-- 20L -->
+                <div
+                    class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500">
                     <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500 transition-all duration-500">
-
-                        <!-- POPULAR BADGE -->
-                        <div
-                            class="absolute top-4 right-4 z-10 bg-aqua-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                            POPULAR
-                        </div>
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="20L.JPG" alt="20L Refill"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-aqua-600">KSh 350</span>
-                                <span class="text-xs text-slate-500">/refill</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">20L Refill</h4>
-                            <p class="text-slate-600 mb-5">Best value for large families & offices</p>
-
-                            <button onclick="openOrderModal('20L Refill')"
-                                class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+                        class="absolute top-4 right-4 z-10 bg-aqua-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                        POPULAR</div>
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="20L.JPG" alt="20L Refill"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-aqua-600">KSh 350</span><span
+                                class="text-xs text-slate-500">/refill</span></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">20L Refill</h4>
+                        <p class="text-slate-600 mb-5">Best value for large families &amp; offices</p><button
+                            onclick="openOrderModal('20L Refill')"
+                            class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">Order
+                            Now</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottled Water -->
-            <div>
-                <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal">
-                    <i data-lucide="wine" class="w-6 h-6 text-primary-600"></i>
-                    Bottled Drinking Water
-                </h3>
-                <div class="grid md:grid-cols-3 gap-8">
-                    <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="man relaxing.JPG" alt="300ml Bottle"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <!-- GRADIENT OVERLAY -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <!-- PRICE BADGE -->
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-primary-600">KSh 30</span>
-                                <span class="text-xs text-slate-500">/bottle</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">300ml Bottle</h4>
-                            <p class="text-slate-600 mb-5">Perfect for events and quick refreshment</p>
-
-                            <button onclick="openOrderModal('300ml Bottle')"
-                                class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+            <!-- Bottled -->
+            <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal"><i
+                    data-lucide="wine" class="w-6 h-6 text-primary-600"></i> Bottled Drinking Water</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- 300ml -->
+                <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="man relaxing.JPG" alt="300ml Bottle"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-primary-600">KSh 30</span><span
+                                class="text-xs text-slate-500">/bottle</span></div>
                     </div>
-                    <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500 transition-all duration-500">
-
-                        <!-- POPULAR BADGE -->
-                        <div
-                            class="absolute top-4 right-4 z-10 bg-aqua-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
-                            BEST SELLER
-                        </div>
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="500mlaa.jpg" alt="500ml bottle"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-aqua-600">KSh 50</span>
-                                <span class="text-xs text-slate-500">/bottle</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">500ml</h4>
-                            <p class="text-slate-600 mb-5">Standard size for everyday hydration</p>
-
-                            <button onclick="openOrderModal('500ml')"
-                                class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">300ml Bottle</h4>
+                        <p class="text-slate-600 mb-5">Perfect for events and quick refreshment</p><button
+                            onclick="openOrderModal('300ml Bottle')"
+                            class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
+                            Now</button>
                     </div>
+                </div>
+                <!-- 500ml -->
+                <div
+                    class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500">
                     <div
-                        class="group relative bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500">
-
-                        <!-- IMAGE -->
-                        <div class="relative h-56 overflow-hidden">
-                            <img src="1Litre.jpg" alt="1L Bottle"
-                                class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
-
-                            <!-- GRADIENT OVERLAY -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent">
-                            </div>
-
-                            <!-- PRICE BADGE -->
-                            <div
-                                class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                                <span class="text-lg font-bold text-primary-600">KSh 80</span>
-                                <span class="text-xs text-slate-500">/bottle</span>
-                            </div>
-                        </div>
-
-                        <!-- CONTENT -->
-                        <div class="p-6 text-center">
-                            <h4 class="text-xl font-bold text-slate-800 mb-2">1L Bottle</h4>
-                            <p class="text-slate-600 mb-5">Great value for longer hydration needs</p>
-
-                            <button onclick="openOrderModal('1L Bottle')"
-                                class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">
-                                Order Now
-                            </button>
-                        </div>
+                        class="absolute top-4 right-4 z-10 bg-aqua-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">
+                        BEST SELLER</div>
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="500mlaa.jpg" alt="500ml Bottle"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-aqua-600">KSh 50</span><span
+                                class="text-xs text-slate-500">/bottle</span></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">500ml Bottle</h4>
+                        <p class="text-slate-600 mb-5">Standard size for everyday hydration</p><button
+                            onclick="openOrderModal('500ml')"
+                            class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">Order
+                            Now</button>
+                    </div>
+                </div>
+                <!-- 1L -->
+                <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
+                    <div class="relative h-56 overflow-hidden">
+                        <img src="1Litre.jpg" alt="1L Bottle"
+                            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            loading="lazy" width="400" height="224">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
+                        <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
+                            <span class="text-lg font-bold text-primary-600">KSh 80</span><span
+                                class="text-xs text-slate-500">/bottle</span></div>
+                    </div>
+                    <div class="p-6 text-center">
+                        <h4 class="text-xl font-bold text-slate-800 mb-2">1L Bottle</h4>
+                        <p class="text-slate-600 mb-5">Great value for longer hydration needs</p><button
+                            onclick="openOrderModal('1L Bottle')"
+                            class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
+                            Now</button>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Services Section -->
-    <section id="services" class="py-20 bg-slate-50">
+    <!-- ░░ SERVICES ░░ -->
+    <section id="services" class="py-20 bg-slate-50 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
-                <span class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">
-                    Our Services
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-                    Complete <span class="text-aqua-600">Water Solutions</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    From refill stations to home delivery, we've got you covered with premium services.
-                </p>
+                <span
+                    class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">Our
+                    Services</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Complete <span
+                        class="text-aqua-600">Water Solutions</span></h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">From refill stations to home delivery, we've got you
+                    covered with premium services.</p>
             </div>
-
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div
                     class="service-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all scroll-reveal">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="refresh-cw" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="refresh-cw" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Water Refill Stations</h4>
                     <p class="text-slate-600 mb-4">Visit any of our 11+ branches in Nairobi for quick and affordable
                         water refills.</p>
                     <a href="#branches"
-                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
-                        Find Station <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </a>
+                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">Find
+                        Station <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
                 </div>
-
                 <div class="service-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all scroll-reveal"
-                    style="transition-delay: 0.1s">
+                    style="transition-delay:.1s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="truck" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-800 mb-3">Home & Office Delivery</h4>
+                        <i data-lucide="truck" class="w-8 h-8 text-white"></i></div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-3">Home &amp; Office Delivery</h4>
                     <p class="text-slate-600 mb-4">Fresh water delivered to your doorstep. Same-day delivery available
                         in select areas.</p>
                     <button onclick="openOrderModal()"
-                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
-                        Schedule Delivery <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">Schedule
+                        Delivery <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                 </div>
-
                 <div class="service-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all scroll-reveal"
-                    style="transition-delay: 0.2s">
+                    style="transition-delay:.2s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="building" class="w-8 h-8 text-white"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-sslate-800 mb-3">Bulk Supply for Business</h4>
+                        <i data-lucide="building" class="w-8 h-8 text-white"></i></div>
+                    <h4 class="text-xl font-bold text-slate-800 mb-3">Bulk Supply for Business</h4>
                     <p class="text-slate-600 mb-4">Special rates for hotels, restaurants, schools, and corporate
                         clients.</p>
                     <button onclick="openOrderModal('Business Bulk')"
-                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
-                        Get Quote <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">Get
+                        Quote <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                 </div>
-
                 <div class="service-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all scroll-reveal"
-                    style="transition-delay: 0.3s">
+                    style="transition-delay:.3s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Subscription Plans</h4>
                     <p class="text-slate-600 mb-4">Weekly or monthly subscriptions with automatic delivery and exclusive
                         discounts.</p>
                     <button onclick="openOrderModal('Subscription')"
-                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">
-                        View Plans <i data-lucide="arrow-right" class="w-4 h-4"></i>
-                    </button>
+                        class="text-primary-600 font-semibold flex items-center gap-2 hover:gap-3 transition-all">View
+                        Plans <i data-lucide="arrow-right" class="w-4 h-4"></i></button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Branch Network Section -->
-    <section id="branches" class="py-20 bg-white">
+    <!-- ░░ BRANCHES ░░ -->
+    <section id="branches" class="py-20 bg-white relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
                 <span
-                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
-                    Our Network
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-                    11+ Independent Branches in <span class="text-primary-600">Nairobi</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Plus coverage in 3 major cities. Find your nearest refill Station.
-                </p>
+                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">Our
+                    Network</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">11+ Independent Branches in <span
+                        class="text-primary-600">Nairobi</span></h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">Plus coverage in 3 major cities. Find your nearest
+                    refill station.</p>
             </div>
-
-            <!-- City Coverage -->
             <div class="grid md:grid-cols-3 gap-6 mb-12">
                 <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-6 text-white scroll-reveal">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                            <i data-lucide="building-2" class="w-6 h-6"></i>
-                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center"><i
+                                data-lucide="building-2" class="w-6 h-6"></i></div>
                         <div>
                             <h4 class="font-bold text-lg">Nairobi</h4>
                             <p class="text-primary-200">11+ Branches</p>
@@ -881,24 +784,22 @@
                     <p class="text-primary-100 text-sm">Westlands, Parklands, Kilimani, Karen, Lavington, and more</p>
                 </div>
                 <div class="bg-gradient-to-br from-aqua-500 to-aqua-700 rounded-2xl p-6 text-white scroll-reveal"
-                    style="transition-delay: 0.1s">
+                    style="transition-delay:.1s">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                            <i data-lucide="building-2" class="w-6 h-6"></i>
-                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center"><i
+                                data-lucide="building-2" class="w-6 h-6"></i></div>
                         <div>
                             <h4 class="font-bold text-lg">Mombasa</h4>
-                            <p class="text-aqua-200">City mall Nyali, Prominade & Diani</p>
+                            <p class="text-aqua-200">City Mall Nyali, Prominade &amp; Diani</p>
                         </div>
                     </div>
                     <p class="text-aqua-100 text-sm">Serving coastal region with fresh water</p>
                 </div>
                 <div class="bg-gradient-to-br from-primary-600 to-primary-800 rounded-2xl p-6 text-white scroll-reveal"
-                    style="transition-delay: 0.2s">
+                    style="transition-delay:.2s">
                     <div class="flex items-center gap-4 mb-4">
-                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                            <i data-lucide="building-2" class="w-6 h-6"></i>
-                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center"><i
+                                data-lucide="building-2" class="w-6 h-6"></i></div>
                         <div>
                             <h4 class="font-bold text-lg">Kisumu</h4>
                             <p class="text-primary-200">United Mall, Kisumu</p>
@@ -908,398 +809,341 @@
                 </div>
             </div>
 
-            <!-- Nairobi Branches Grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                <!-- Nairobi branches -->
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Westlands Branch</h5>
+                            <h5 class="font-bold text-slate-800">Westlands</h5>
                             <p class="text-sm text-slate-600">Ambience Mall</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 708 700 800</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 708 700 800</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Parklands Branch</h5>
+                            <h5 class="font-bold text-slate-800">Parklands</h5>
                             <p class="text-sm text-slate-600">Highridge Mall</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 740 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 740 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Kilimani Branch</h5>
+                            <h5 class="font-bold text-slate-800">Kilimani</h5>
                             <p class="text-sm text-slate-600">Behind Adlife Plaza</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 729 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 729 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.15s">
+                    style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Karen Branch</h5>
+                            <h5 class="font-bold text-slate-800">Karen</h5>
                             <p class="text-sm text-slate-600">Karen Square</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 792 700 800</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 792 700 800</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Lavington Branch</h5>
-                            <p class="text-sm text-slate-600">105 James Gichuru Road</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 708 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Lavington</h5>
+                            <p class="text-sm text-slate-600">105 James Gichuru Rd</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 708 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Kileleshwa Branch</h5>
-                            <p class="text-sm text-slate-600">G's Arcade, Kieni Road</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 797 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Kileleshwa</h5>
+                            <p class="text-sm text-slate-600">G's Arcade, Kieni Rd</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 797 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">South B Branch</h5>
+                            <h5 class="font-bold text-slate-800">South B</h5>
                             <p class="text-sm text-slate-600">LA Enzi Plaza</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 707 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 707 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.15s">
+                    style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Langata Branch</h5>
+                            <h5 class="font-bold text-slate-800">Langata</h5>
                             <p class="text-sm text-slate-600">Bethel Business Center</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 728 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 728 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Mbaazi Branch</h5>
-                            <p class="text-sm text-slate-600">Westfield Mall, Behind Valley Arcade</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 715 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Mbaazi</h5>
+                            <p class="text-sm text-slate-600">Westfield Mall, Valley Arcade</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 715 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Chaka Branch</h5>
+                            <h5 class="font-bold text-slate-800">Chaka</h5>
                             <p class="text-sm text-slate-600">Chaka Road Mall</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 717 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 717 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Gachie Branch</h5>
-                            <p class="text-sm text-slate-600">Westbay Mall opposite Nyari Estate</p>
-                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1">
-                                <i data-lucide="phone" class="w-4 h-4 text-primary-600"></i>
-                                <span>+254 791 200 300</span>
-                            </p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Gachie</h5>
+                            <p class="text-sm text-slate-600">Westbay Mall, opp. Nyari Estate</p>
+                            <p class="text-xs text-slate-500 flex items-center gap-1 mt-1"><i data-lucide="phone"
+                                    class="w-3 h-3 text-primary-600"></i> +254 791 200 300</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-primary-50 rounded-xl p-5 border-2 border-primary-200 flex items-center justify-center scroll-reveal"
-                    style="transition-delay: 0.15s">
-                    <a href="https://wa.me/254741200300" target="_blank" class="text-center">
+                    style="transition-delay:.15s"><a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+                        class="text-center">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full bg-primary-600 flex items-center justify-center">
-                            <i data-lucide="plus" class="w-6 h-6 text-white"></i>
-                        </div>
+                            <i data-lucide="plus" class="w-6 h-6 text-white"></i></div>
                         <p class="text-sm font-semibold text-primary-700">More Coming Soon</p>
-                    </a>
-                </div>
+                    </a></div>
             </div>
         </div>
     </section>
 
-    <section id="branches" class="py-20 bg-white">
+    <!-- ░░ CARREFOUR BRANCHES ░░ -->
+    <section class="py-20 bg-slate-50 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-                    Countrywide Branches in <span class="text-primary-600">Carrefour Supermarkets</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Find our refill stations conveniently located within Carrefour supermarkets across Kenya.
-                </p>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Countrywide Branches in <span
+                        class="text-primary-600">Carrefour Supermarkets</span></h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">Find our refill stations conveniently located within
+                    Carrefour supermarkets across Kenya.</p>
             </div>
-
-            <!-- Carrefour Branches Grid -->
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carefour TRM Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour TRM</h5>
                             <p class="text-sm text-slate-600">Thika Road Mall</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Mega Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Mega</h5>
                             <p class="text-sm text-slate-600">Uhuru Highway</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Two Rivers Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Two Rivers</h5>
                             <p class="text-sm text-slate-600">Two Rivers Mall</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.15s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour The Nord Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour The Nord</h5>
                             <p class="text-sm text-slate-600">Ruiru</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour The Hub Branch</h5>
-                            <p class="text-sm text-slate-600">The hub mall, Karen</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Carrefour The Hub</h5>
+                            <p class="text-sm text-slate-600">The Hub Mall, Karen</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Sarit Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Sarit</h5>
                             <p class="text-sm text-slate-600">Sarit Centre, Westlands</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Galleria Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Galleria</h5>
                             <p class="text-sm text-slate-600">Galleria Mall, Langata</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.15s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Eastleigh Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Eastleigh</h5>
                             <p class="text-sm text-slate-600">Eastleigh Business Bay Square</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Runda Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour Runda</h5>
                             <p class="text-sm text-slate-600">Runda Mall</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.05s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour United Mall Branch</h5>
+                            <h5 class="font-bold text-slate-800">Carrefour United Mall</h5>
                             <p class="text-sm text-slate-600">United Mall, Kisumu</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
-                <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal"
-                    style="transition-delay: 0.1s">
+                <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal"
+                    style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
-                            <h5 class="font-bold text-slate-800">Carrefour Mombasa Branches</h5>
-                            <p class="text-sm text-slate-600">City Mall Nyali, Prominade Mall & Diani</p>
-                            <p class="text-xs text-primary-600 mt-1">Open 8AM - 8PM</p>
+                            <h5 class="font-bold text-slate-800">Carrefour Mombasa</h5>
+                            <p class="text-sm text-slate-600">City Mall Nyali, Prominade &amp; Diani</p>
+                            <p class="text-xs text-primary-600 mt-1">Open 8AM – 8PM</p>
                         </div>
                     </div>
                 </div>
                 <div class="branch-card bg-primary-50 rounded-xl p-5 border-2 border-primary-200 flex items-center justify-center scroll-reveal"
-                    style="transition-delay: 0.15s">
-                    <a href="https://wa.me/254741200300" target="_blank" class="text-center">
+                    style="transition-delay:.15s"><a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+                        class="text-center">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full bg-primary-600 flex items-center justify-center">
-                            <i data-lucide="plus" class="w-6 h-6 text-white"></i>
-                        </div>
+                            <i data-lucide="plus" class="w-6 h-6 text-white"></i></div>
                         <p class="text-sm font-semibold text-primary-700">More Coming Soon</p>
-                    </a>
-                </div>
+                    </a></div>
             </div>
         </div>
     </section>
 
-    <!-- Why Choose Us Section -->
-    <section id="about" class="py-20 bg-slate-50">
+    <!-- ░░ ABOUT / WHY US ░░ -->
+    <section id="about" class="py-20 bg-white relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
                 <div class="scroll-reveal">
                     <span
-                        class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">
-                        Why Urban Waters
-                    </span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
-                        Quality You Can <span class="text-aqua-600">Trust</span>
-                    </h2>
-                    <p class="text-lg text-slate-600 mb-8">
-                        We've built our reputation on delivering pure, safe, and affordable water to thousands of Kenyan
-                        families and businesses.
-                    </p>
-
+                        class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">Why
+                        Urban Waters</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-6">Quality You Can <span
+                            class="text-aqua-600">Trust</span></h2>
+                    <p class="text-lg text-slate-600 mb-8">We've built our reputation on delivering pure, safe, and
+                        affordable water to thousands of Kenyan families and businesses.</p>
                     <div class="space-y-6">
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i></div>
                             <div>
-                                <h4 class="font-bold text-slate-800 text-lg">Clean & Safe Water</h4>
+                                <h4 class="font-bold text-slate-800 text-lg">Clean &amp; Safe Water</h4>
                                 <p class="text-slate-600">Multi-stage purification process ensures 99.9% purity.
                                     Certified by KEBS.</p>
                             </div>
@@ -1307,8 +1151,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Affordable Pricing</h4>
                                 <p class="text-slate-600">Competitive rates without compromising quality. Bulk discounts
@@ -1318,8 +1161,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="zap" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="zap" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Fast Delivery</h4>
                                 <p class="text-slate-600">Same-day delivery in Nairobi. Reliable scheduling you can
@@ -1329,8 +1171,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="award" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="award" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Reliable Service</h4>
                                 <p class="text-slate-600">10+ years of experience. 10,000+ happy customers trust us
@@ -1340,8 +1181,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="cpu" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Modern Purification</h4>
                                 <p class="text-slate-600">State-of-the-art RO, UV, and ozone treatment systems.</p>
@@ -1351,28 +1191,25 @@
                 </div>
                 <div class="relative scroll-reveal">
                     <div class="relative rounded-3xl overflow-hidden shadow-2xl">
-                        <img src="event.JPG" alt="Modern water purification" class="w-full h-auto">
-                        <div class="absolute inset-0 bg-gradient-to-t from-primary-900/60 to-transparent"></div>
+                        <img src="event.JPG" alt="Modern water purification" class="w-full h-auto" loading="lazy">
                         <div class="absolute bottom-6 left-6 right-6">
                             <div class="glass-effect rounded-2xl p-4">
                                 <div class="flex items-center gap-4">
-                                    <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center">
-                                        <i data-lucide="check-circle" class="w-8 h-8 text-green-500"></i>
-                                    </div>
+                                    <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center"><i
+                                            data-lucide="check-circle" class="w-8 h-8 text-green-500"></i></div>
                                     <div>
-                                        <p class="text-white font-bold">KEBS Certified</p>
-                                        <p class="text-white/80 text-sm">Quality assured water</p>
+                                        <p class="text-aqua-800 font-bold">KEBS Certified</p>
+                                        <p class="text-black text-sm">Quality assured water</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <!-- Floating Stats -->
-                    <div class="absolute -top-6 -right-6 bg-white rounded-2xl p-4 shadow-xl animate-float">
+                    <div class="absolute -top-6 -right-6 bg-white rounded-2xl p-4 shadow-xl"
+                        style="animation:floatBadge 3s ease-in-out infinite">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                                <i data-lucide="trending-up" class="w-5 h-5 text-green-600"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center"><i
+                                    data-lucide="trending-up" class="w-5 h-5 text-green-600"></i></div>
                             <div>
                                 <p class="text-2xl font-bold text-slate-800">99.9%</p>
                                 <p class="text-xs text-slate-500">Purity Rate</p>
@@ -1384,76 +1221,65 @@
         </div>
     </section>
 
-    <!-- Testimonials Section -->
-    <section id="testimonials" class="py-20 bg-white">
+    <style>
+        @keyframes floatBadge {
+
+            0%,
+            100% {
+                transform: translateY(0)
+            }
+
+            50% {
+                transform: translateY(-10px)
+            }
+        }
+    </style>
+
+    <!-- ░░ TESTIMONIALS ░░ -->
+    <section id="testimonials" class="py-20 bg-slate-50 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
                 <span
-                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">
-                    Testimonials
-                </span>
-                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
-                    What Our <span class="text-primary-600">Customers Say</span>
-                </h2>
-                <p class="text-lg text-slate-600 max-w-2xl mx-auto">
-                    Join thousands of satisfied customers who trust Urban Waters for their daily hydration.
-                </p>
+                    class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4">Testimonials</span>
+                <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">What Our <span
+                        class="text-primary-600">Customers Say</span></h2>
+                <p class="text-lg text-slate-600 max-w-2xl mx-auto">Join thousands of satisfied customers who trust
+                    Urban Waters for their daily hydration.</p>
             </div>
-
             <div class="grid md:grid-cols-3 gap-8">
-                <div class="testimonial-card bg-slate-50 rounded-3xl p-8 border border-slate-100 scroll-reveal">
-                    <div class="flex items-center gap-1 mb-4">
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                    </div>
+                <div class="testimonial-card bg-white rounded-3xl p-8 border border-slate-100 shadow scroll-reveal">
+                    <div class="flex items-center gap-1 mb-4">⭐⭐⭐⭐⭐</div>
                     <p class="text-slate-600 mb-6">"Urban Waters has been our family's water source for 3 years. The
                         refill service is convenient and the water quality is consistently excellent. Highly recommend!"
                     </p>
-                    <div class="flex items-center gap-4">
-                        <img src="sarah.jpg" alt="Sarah Kimani" class="w-12 h-12 rounded-full object-cover">
+                    <div class="flex items-center gap-4"><img src="sarah.jpg" alt="Sarah Kimani"
+                            class="w-12 h-12 rounded-full object-cover" loading="lazy" width="48" height="48">
                         <div>
                             <h5 class="font-bold text-slate-800">Sarah Kimani</h5>
                             <p class="text-sm text-slate-500">Homeowner, Karen</p>
                         </div>
                     </div>
                 </div>
-
-                <div class="testimonial-card bg-slate-50 rounded-3xl p-8 border border-slate-100 scroll-reveal"
-                    style="transition-delay: 0.1s">
-                    <div class="flex items-center gap-1 mb-4">
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                    </div>
+                <div class="testimonial-card bg-white rounded-3xl p-8 border border-slate-100 shadow scroll-reveal"
+                    style="transition-delay:.1s">
+                    <div class="flex items-center gap-1 mb-4">⭐⭐⭐⭐⭐</div>
                     <p class="text-slate-600 mb-6">"As a restaurant owner, water quality is crucial. Urban Waters
                         delivers bulk orders on time, every time. Their subscription plan saves us 20% monthly."</p>
-                    <div class="flex items-center gap-4">
-                        <img src="james.jfif" alt="James Omondi" class="w-12 h-12 rounded-full object-cover">
+                    <div class="flex items-center gap-4"><img src="james.jfif" alt="James Omondi"
+                            class="w-12 h-12 rounded-full object-cover" loading="lazy" width="48" height="48">
                         <div>
                             <h5 class="font-bold text-slate-800">James Omondi</h5>
                             <p class="text-sm text-slate-500">Restaurant Owner, Westlands</p>
                         </div>
                     </div>
                 </div>
-
-                <div class="testimonial-card bg-slate-50 rounded-3xl p-8 border border-slate-100 scroll-reveal"
-                    style="transition-delay: 0.2s">
-                    <div class="flex items-center gap-1 mb-4">
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                        <i data-lucide="star" class="w-5 h-5 text-yellow-400 fill-yellow-400"></i>
-                    </div>
+                <div class="testimonial-card bg-white rounded-3xl p-8 border border-slate-100 shadow scroll-reveal"
+                    style="transition-delay:.2s">
+                    <div class="flex items-center gap-1 mb-4">⭐⭐⭐⭐⭐</div>
                     <p class="text-slate-600 mb-6">"The delivery service is a game changer! I never have to worry about
                         running out of water. The ordering process is seamless. Best water company in Kenya!"</p>
-                    <div class="flex items-center gap-4">
-                        <img src="Grace muthoni.jpg" alt="Grace Muthoni" class="w-12 h-12 rounded-full object-cover">
+                    <div class="flex items-center gap-4"><img src="Grace muthoni.jpg" alt="Grace Chebet"
+                            class="w-12 h-12 rounded-full object-cover" loading="lazy" width="48" height="48">
                         <div>
                             <h5 class="font-bold text-slate-800">Grace Chebet</h5>
                             <p class="text-sm text-slate-500">Office Manager, Kilimani</p>
@@ -1464,211 +1290,161 @@
         </div>
     </section>
 
-    <!-- CTA Section -->
-    <section class="py-20 relative overflow-hidden">
+    <!-- ░░ CTA ░░ -->
+    <section class="py-20 relative overflow-hidden z-2">
         <div class="absolute inset-0 water-gradient"></div>
         <div class="absolute inset-0 opacity-10">
             <div
-                class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2">
+                class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2">
             </div>
             <div
-                class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl transform translate-x-1/2 translate-y-1/2">
+                class="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full blur-3xl translate-x-1/2 translate-y-1/2">
             </div>
         </div>
-
         <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div class="max-w-3xl mx-auto text-center scroll-reveal">
-                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
-                    Stay Hydrated with Quality You Can Trust
-                </h2>
-                <p class="text-xl text-white/90 mb-10">
-                    Join 10,000+ happy customers. Order today and experience the Urban Waters difference.
-                </p>
+                <h2 class="text-4xl md:text-5xl font-bold text-white mb-6">Stay Hydrated with Quality You Can Trust</h2>
+                <p class="text-xl text-white/90 mb-10">Join 10,000+ happy customers. Order today and experience the
+                    Urban Waters difference.</p>
                 <div class="flex flex-wrap justify-center gap-4">
                     <button onclick="openOrderModal()"
-                        class="bg-white text-primary-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all hover:scale-105">
-                        Order Now
-                    </button>
+                        class="bg-white text-primary-600 px-8 py-4 rounded-full font-bold text-lg hover:shadow-xl transition-all hover:scale-105">Order
+                        Now</button>
                     <a href="#contact"
-                        class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-primary-600 transition-all">
-                        Contact Us
-                    </a>
+                        class="bg-transparent border-2 border-white text-white px-8 py-4 rounded-full font-bold text-lg hover:bg-white hover:text-primary-600 transition-all">Contact
+                        Us</a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-slate-50">
+    <!-- ░░ CONTACT ░░ -->
+    <section id="contact" class="py-20 bg-slate-50 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-16">
                 <div class="scroll-reveal">
                     <span
-                        class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">
-                        Get In Touch
-                    </span>
-                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-6">
-                        Let's Start a <span class="text-aqua-600">Conversation</span>
-                    </h2>
-                    <p class="text-lg text-slate-600 mb-8">
-                        Have questions or need a custom quote? We're here to help. Reach out through any of these
-                        channels.
+                        class="inline-block px-4 py-2 bg-aqua-100 text-aqua-700 rounded-full text-sm font-semibold mb-4">Get
+                        In Touch</span>
+                    <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-6">Let's Start a <span
+                            class="text-aqua-600">Conversation</span></h2>
+                    <p class="text-lg text-slate-600 mb-8">Have questions or need a custom quote? We're here to help.
                     </p>
-
                     <div class="space-y-6">
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center">
-                                <i data-lucide="phone" class="w-6 h-6 text-white"></i>
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center"><i
+                                    data-lucide="phone" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <p class="text-slate-500 text-sm">Phone</p>
                                 <p class="text-slate-800 font-semibold text-lg">+254 741 200 300</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center">
-                                <i data-lucide="mail" class="w-6 h-6 text-white"></i>
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center"><i
+                                    data-lucide="mail" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <p class="text-slate-500 text-sm">Email</p>
-                                <p class="text-slate-800 font-semibold text-lg">urbanwaterscustomercare@gmail.com</p>
+                                <p class="text-slate-800 font-semibold">urbanwaterscustomercare@gmail.com</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center">
-                                <i data-lucide="map-pin" class="w-6 h-6 text-white"></i>
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl water-gradient flex items-center justify-center"><i
+                                    data-lucide="map-pin" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <p class="text-slate-500 text-sm">Head Office</p>
-                                <p class="text-slate-800 font-semibold text-lg">Marsabit Plaza, Ngong road - Nairobi</p>
+                                <p class="text-slate-800 font-semibold">Marsabit Plaza, Ngong Road – Nairobi</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-4">
-                            <div class="w-14 h-14 rounded-2xl bg-green-500 flex items-center justify-center">
-                                <i data-lucide="message-circle" class="w-6 h-6 text-white"></i>
-                            </div>
+                            <div class="w-14 h-14 rounded-2xl bg-green-500 flex items-center justify-center"><i
+                                    data-lucide="message-circle" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <p class="text-slate-500 text-sm">WhatsApp</p>
                                 <p class="text-slate-800 font-semibold text-lg">+254 741 200 300</p>
                             </div>
                         </div>
                     </div>
-
                     <div class="mt-8 flex gap-4">
-
-                        <!-- Facebook -->
-                        <a href="https://www.facebook.com/UrbanWatersKE" target="_blank" rel="noopener noreferrer"
-                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-blue-600 transition-all group">
-
-                            <svg class="w-5 h-5 text-blue-600 group-hover:text-white transition-colors"
-                                fill="currentColor" viewBox="0 0 24 24">
+                        <a href="https://www.facebook.com/UrbanWatersKE" target="_blank" rel="noopener"
+                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-blue-600 transition-all group"><svg
+                                class="w-5 h-5 text-blue-600 group-hover:text-white" fill="currentColor"
+                                viewBox="0 0 24 24">
                                 <path
                                     d="M22 12a10 10 0 10-11.6 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.4h-1.2c-1.2 0-1.6.7-1.6 1.5V12h2.8l-.4 2.9h-2.4v7A10 10 0 0022 12z" />
-                            </svg>
-
-                        </a>
-
-                        <!-- Instagram -->
-                        <a href="https://www.instagram.com/urbanwaters.ke/" target="_blank" rel="noopener noreferrer"
-                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-pink-500 transition-all group">
-                            <svg class="w-5 h-5 text-pink-500 group-hover:text-white transition-colors"
-                                fill="currentColor" viewBox="0 0 24 24">
+                            </svg></a>
+                        <a href="https://www.instagram.com/urbanwaters.ke/" target="_blank" rel="noopener"
+                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-pink-500 transition-all group"><svg
+                                class="w-5 h-5 text-pink-500 group-hover:text-white" fill="currentColor"
+                                viewBox="0 0 24 24">
                                 <path
                                     d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm10 2H7a3 3 0 00-3 3v10a3 3 0 003 3h10a3 3 0 003-3V7a3 3 0 00-3-3zm-5 4a5 5 0 110 10 5 5 0 010-10zm0 2a3 3 0 100 6 3 3 0 000-6zm5.5-.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
-                            </svg>
-                        </a>
-
-                        <!-- Twitter / X -->
+                            </svg></a>
                         <a href="#"
-                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-black transition-all group">
-                            <svg class="w-5 h-5 text-slate-800 group-hover:text-white transition-colors"
-                                fill="currentColor" viewBox="0 0 24 24">
+                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-black transition-all group"><svg
+                                class="w-5 h-5 text-slate-800 group-hover:text-white" fill="currentColor"
+                                viewBox="0 0 24 24">
                                 <path
                                     d="M18.9 2H22l-6.8 7.8L23 22h-6.7l-5.2-6.7L5.3 22H2l7.3-8.4L1 2h6.9l4.7 6.1L18.9 2zm-1.2 18h1.8L7.1 3.9H5.2L17.7 20z" />
-                            </svg>
-                        </a>
-
-                        <!-- LinkedIn -->
+                            </svg></a>
                         <a href="#"
-                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-blue-700 transition-all group">
-                            <svg class="w-5 h-5 text-blue-700 group-hover:text-white transition-colors"
-                                fill="currentColor" viewBox="0 0 24 24">
+                            class="w-12 h-12 rounded-full bg-slate-200 flex items-center justify-center hover:bg-blue-700 transition-all group"><svg
+                                class="w-5 h-5 text-blue-700 group-hover:text-white" fill="currentColor"
+                                viewBox="0 0 24 24">
                                 <path
                                     d="M4 3a2 2 0 100 4 2 2 0 000-4zm1 6H3v12h2V9zm6 0H9v12h2v-6c0-1.7 2-2 2 0v6h2v-7c0-3-3-3.1-4-1.5V9z" />
-                            </svg>
-                        </a>
-
+                            </svg></a>
                     </div>
                 </div>
-
                 <div class="bg-white rounded-3xl p-8 shadow-xl scroll-reveal">
                     <h3 class="text-2xl font-bold text-slate-800 mb-6">Send us a Message</h3>
                     <form id="contactForm" class="space-y-4">
                         <div class="grid md:grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-2">First Name</label>
-                                <input type="text" required
+                            <div><label class="block text-sm font-medium text-slate-700 mb-2">First Name</label><input
+                                    type="text" required
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                                    placeholder="John">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-medium text-slate-700 mb-2">Last Name</label>
-                                <input type="text" required
+                                    placeholder="John"></div>
+                            <div><label class="block text-sm font-medium text-slate-700 mb-2">Last Name</label><input
+                                    type="text" required
                                     class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                                    placeholder="Doe">
-                            </div>
+                                    placeholder="Doe"></div>
                         </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
-                            <input type="email" required
+                        <div><label class="block text-sm font-medium text-slate-700 mb-2">Email</label><input
+                                type="email" required
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                                placeholder="john@example.com">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Phone</label>
-                            <input type="tel"
+                                placeholder="john@example.com"></div>
+                        <div><label class="block text-sm font-medium text-slate-700 mb-2">Phone</label><input type="tel"
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                                placeholder="+254 712 345 678">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-2">Message</label>
-                            <textarea rows="4" required
+                                placeholder="+254 712 345 678"></div>
+                        <div><label class="block text-sm font-medium text-slate-700 mb-2">Message</label><textarea
+                                rows="4" required
                                 class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all resize-none"
-                                placeholder="How can we help you?"></textarea>
-                        </div>
+                                placeholder="How can we help you?"></textarea></div>
                         <button type="submit"
-                            class="w-full btn-primary text-white py-4 rounded-xl font-semibold text-lg ripple">
-                            Send Message
-                        </button>
+                            class="w-full btn-primary text-white py-4 rounded-xl font-semibold text-lg ripple">Send
+                            Message</button>
                     </form>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-16">
+    <!-- ░░ FOOTER ░░ -->
+    <footer class="bg-slate-900 text-white py-16 relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
                 <div>
-                    <div class="flex items-center gap-3 mb-6">
-                        <a href="#home" class="flex items-center gap-3 group">
-                            <div class="w-16 h-16 rounded-full overflow-hidden shadow-lg">
-                                <img src="logo.jpg" alt="Logo" class="w-full h-full object-cover">
-                            </div>
-                            <div>
-                                <h1 class="text-xl font-bold text-white group-hover:text-primary-600 transition-colors">
-                                    Urban Waters</h1>
-                                <p class="text-xs text-white">Purified drinking water</p>
-                            </div>
-                        </a>
-                    </div>
-                    <p class="text-slate-400 mb-6">
-                        Kenya's trusted water company since 2014. Delivering purity to thousands of homes and businesses
-                        daily.
-                    </p>
+                    <a href="#home" class="flex items-center gap-3 group mb-6">
+                        <div class="w-14 h-14 rounded-full overflow-hidden shadow-lg"><img src="logo.jpg" alt="Logo"
+                                class="w-full h-full object-cover" loading="lazy" width="56" height="56"></div>
+                        <div>
+                            <h1 class="text-xl font-bold text-white group-hover:text-aqua-400 transition-colors">Urban
+                                Waters</h1>
+                            <p class="text-xs text-white/70">Purified drinking water</p>
+                        </div>
+                    </a>
+                    <p class="text-slate-400">Kenya's trusted water company since 2014. Delivering purity to thousands
+                        of homes and businesses daily.</p>
                 </div>
-
                 <div>
                     <h4 class="font-bold text-lg mb-6">Quick Links</h4>
                     <ul class="space-y-3">
@@ -1683,28 +1459,21 @@
                         </li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="font-bold text-lg mb-6">Services</h4>
                     <ul class="space-y-3">
                         <li><a href="#products" class="text-slate-400 hover:text-aqua-400 transition-colors">Water
-                                Refills</a>
-                        </li>
+                                Refills</a></li>
                         <li><a href="#products" class="text-slate-400 hover:text-aqua-400 transition-colors">Bottled
-                                Water</a>
-                        </li>
+                                Water</a></li>
                         <li><a href="#products" class="text-slate-400 hover:text-aqua-400 transition-colors">Home
-                                Delivery</a>
-                        </li>
+                                Delivery</a></li>
                         <li><a href="#products" class="text-slate-400 hover:text-aqua-400 transition-colors">Business
-                                Supply</a>
-                        </li>
+                                Supply</a></li>
                         <li><a href="#products"
-                                class="text-slate-400 hover:text-aqua-400 transition-colors">Subscriptions</a>
-                        </li>
+                                class="text-slate-400 hover:text-aqua-400 transition-colors">Subscriptions</a></li>
                     </ul>
                 </div>
-
                 <div>
                     <h4 class="font-bold text-lg mb-6">Newsletter</h4>
                     <p class="text-slate-400 mb-4">Subscribe for updates and exclusive offers.</p>
@@ -1712,17 +1481,13 @@
                         <input type="email" placeholder="Your email"
                             class="flex-1 px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-aqua-500 outline-none">
                         <button type="submit"
-                            class="px-4 py-3 rounded-xl water-gradient hover:opacity-90 transition-opacity">
-                            <i data-lucide="send" class="w-5 h-5"></i>
-                        </button>
+                            class="px-4 py-3 rounded-xl water-gradient hover:opacity-90 transition-opacity"><i
+                                data-lucide="send" class="w-5 h-5"></i></button>
                     </form>
                 </div>
             </div>
-
             <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                <p class="text-slate-500 text-sm">
-                    © 2026 Urban Waters Company. All rights reserved.
-                </p>
+                <p class="text-slate-500 text-sm">© 2026 Urban Waters Company. All rights reserved.</p>
                 <div class="flex gap-6 text-sm">
                     <a href="#" class="text-slate-500 hover:text-aqua-400 transition-colors">Privacy Policy</a>
                     <a href="#" class="text-slate-500 hover:text-aqua-400 transition-colors">Terms of Service</a>
@@ -1732,95 +1497,76 @@
         </div>
     </footer>
 
-    <!-- WhatsApp Float Button -->
-    <a href="https://wa.me/254741200300" target="_blank"
+    <!-- WhatsApp float -->
+    <a href="https://wa.me/254741200300" target="_blank" rel="noopener"
         class="whatsapp-float fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform">
         <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
     </a>
 
-    <!-- Order Modal -->
+    <!-- ░░ ORDER MODAL ░░ -->
     <div id="orderModal" class="fixed inset-0 z-50 hidden">
         <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeOrderModal()"></div>
         <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div
-                class="bg-white rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative animate-slide-up">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
                 <button onclick="closeOrderModal()"
-                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
-                    <i data-lucide="x" class="w-5 h-5"></i>
-                </button>
-
+                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors"><i
+                        data-lucide="x" class="w-5 h-5"></i></button>
                 <div class="text-center mb-6">
-                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center">
-                        <i data-lucide="shopping-cart" class="w-8 h-8 text-white"></i>
-                    </div>
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center"><i
+                            data-lucide="shopping-cart" class="w-8 h-8 text-white"></i></div>
                     <h3 class="text-2xl font-bold text-slate-800">Place Your Order</h3>
                     <p class="text-slate-600">Fill in your details and we'll get back to you shortly.</p>
                 </div>
-
                 <form id="orderForm" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
-                        <input type="text" required
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Full Name *</label><input
+                            type="text" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                            placeholder="John Doe">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number *</label>
-                        <input type="tel" required
+                            placeholder="John Doe"></div>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Phone Number *</label><input
+                            type="tel" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                            placeholder="+254 712 345 678">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
-                        <input type="email"
+                            placeholder="+254 712 345 678"></div>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Email</label><input type="email"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all"
-                            placeholder="john@example.com">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Product/Service *</label>
+                            placeholder="john@example.com"></div>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Product/Service *</label>
                         <select id="orderProduct" required
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all">
                             <option value="">Select an option</option>
-                            <option value="5L Refill">5L Refill - KSh 100</option>
-                            <option value="10L Refill">10L Refill - KSh 180</option>
-                            <option value="20L Refill">20L Refill - KSh 350</option>
-                            <option value="300ml Bottle">300ml Bottle - KSh 30</option>
-                            <option value="500ml Bottle">500ml Bottle - KSh 50</option>
-                            <option value="1L Bottle">1L Bottle - KSh 80</option>
+                            <option value="5L Refill">5L Refill – KSh 100</option>
+                            <option value="10L Refill">10L Refill – KSh 180</option>
+                            <option value="20L Refill">20L Refill – KSh 350</option>
+                            <option value="300ml Bottle">300ml Bottle – KSh 30</option>
+                            <option value="500ml Bottle">500ml Bottle – KSh 50</option>
+                            <option value="1L Bottle">1L Bottle – KSh 80</option>
                             <option value="Home Delivery">Home Delivery Service</option>
                             <option value="Business Bulk">Business Bulk Supply</option>
                             <option value="Subscription">Subscription Plan</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Quantity</label>
-                        <input type="number" min="1" value="1"
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Quantity</label><input
+                            type="number" min="1" value="1"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all">
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Delivery Address</label>
-                        <textarea rows="2"
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Delivery Address</label><textarea
+                            rows="2"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all resize-none"
-                            placeholder="Your delivery address"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Additional Notes</label>
-                        <textarea rows="2"
+                            placeholder="Your delivery address"></textarea></div>
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Additional Notes</label><textarea
+                            rows="2"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all resize-none"
-                            placeholder="Any special requests..."></textarea>
-                    </div>
+                            placeholder="Any special requests..."></textarea></div>
                     <button type="submit"
-                        class="w-full btn-primary text-white py-4 rounded-xl font-semibold text-lg ripple">
-                        Submit Order
-                    </button>
+                        class="w-full btn-primary text-white py-4 rounded-xl font-semibold text-lg ripple">Submit
+                        Order</button>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Success Toast -->
-    <div id="successToast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 hidden">
-        <div class="bg-green-500 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3 animate-slide-up">
+    <!-- Toast -->
+    <div id="successToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
+        <div class="bg-green-500 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3">
             <i data-lucide="check-circle" class="w-6 h-6"></i>
             <div>
                 <p class="font-semibold">Success!</p>
@@ -1829,155 +1575,224 @@
         </div>
     </div>
 
+    <!-- ░░ SCRIPTS ░░ -->
     <script>
-        // Initialize Lucide icons after DOM is loaded
-        document.addEventListener('DOMContentLoaded', function () {
-            lucide.createIcons();
-        });
-    </script>
-    <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
+        /* ── Init Lucide after load ── */
+        window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
+        document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
 
-        // Navbar scroll effect
+        /* ── Nav scroll ── */
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('nav-scrolled');
-            } else {
-                navbar.classList.remove('nav-scrolled');
-            }
+            navbar.classList.toggle('nav-scrolled', window.scrollY > 50);
+            // update nav link colors when scrolled
+            const links = navbar.querySelectorAll('a, button:not(#mobileMenuBtn)');
+            links.forEach(l => {
+                if (window.scrollY > 50) { l.style.color = ''; }
+            });
+        }, { passive: true });
+
+        /* ── Mobile menu ── */
+        document.getElementById('mobileMenuBtn').addEventListener('click', () => {
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
-        // Hero slider
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.hero-slide');
-        const dots = document.querySelectorAll('.slide-dot');
-        const totalSlides = slides.length;
+        /* ── HERO CAROUSEL ── */
+        const slides = Array.from(document.querySelectorAll('.slide'));
+        const dots = Array.from(document.querySelectorAll('.slide-dot'));
+        let current = 0;
+        let autoTimer;
 
-        function goToSlide(index) {
-            slides[currentSlide].classList.remove('active');
-            dots[currentSlide].classList.remove('active', 'bg-white');
-            dots[currentSlide].classList.add('bg-white/50');
+        function goToSlide(idx) {
+            slides[current].classList.remove('active');
+            dots[current].classList.remove('active');
+            current = (idx + slides.length) % slides.length;
+            slides[current].classList.add('active');
+            dots[current].classList.add('active');
 
-            currentSlide = index;
-
-            slides[currentSlide].classList.add('active');
-            dots[currentSlide].classList.remove('bg-white/50');
-            dots[currentSlide].classList.add('active', 'bg-white');
-        }
-
-        function nextSlide() {
-            goToSlide((currentSlide + 1) % totalSlides);
-        }
-
-        // Auto-advance slides
-        setInterval(nextSlide, 5000);
-
-        // Counter animation
-        const counters = document.querySelectorAll('.counter-value');
-        const animateCounters = () => {
-            counters.forEach(counter => {
-                const target = parseInt(counter.getAttribute('data-target'));
-                const duration = 2000;
-                const increment = target / (duration / 16);
-                let current = 0;
-
-                const updateCounter = () => {
-                    current += increment;
-                    if (current < target) {
-                        counter.textContent = Math.floor(current).toLocaleString();
-                        requestAnimationFrame(updateCounter);
-                    } else {
-                        counter.textContent = target.toLocaleString();
-                    }
-                };
-
-                updateCounter();
+            // Play video of the new active slide, pause others
+            slides.forEach((s, i) => {
+                const v = s.querySelector('video');
+                if (!v) return;
+                if (i === current) { v.play().catch(() => { }); }
+                else { v.pause(); }
             });
-        };
+        }
 
-        // Intersection Observer for scroll animations
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        function nextSlide() { goToSlide(current + 1); }
+        autoTimer = setInterval(nextSlide, 5500);
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('revealed');
+        // Restart timer on manual nav
+        dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(autoTimer); goToSlide(i); autoTimer = setInterval(nextSlide, 5500); }));
 
-                    // Trigger counters when stats section is visible
-                    if (entry.target.querySelector('.counter-value')) {
-                        animateCounters();
-                    }
+        /* ── COUNTER ── */
+        let countersRun = false;
+        function runCounters() {
+            if (countersRun) return; countersRun = true;
+            document.querySelectorAll('.counter-value').forEach(el => {
+                const target = +el.dataset.target;
+                const dur = 2000, step = 16;
+                const inc = target / (dur / step);
+                let val = 0;
+                const tick = () => {
+                    val += inc;
+                    if (val < target) { el.textContent = Math.floor(val).toLocaleString(); requestAnimationFrame(tick); }
+                    else { el.textContent = target.toLocaleString(); }
+                };
+                requestAnimationFrame(tick);
+            });
+        }
+
+        /* ── SCROLL REVEAL ── */
+        const revealObs = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('revealed');
+                    if (e.target.querySelector('.counter-value')) runCounters();
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+        document.querySelectorAll('.scroll-reveal').forEach(el => revealObs.observe(el));
 
-        document.querySelectorAll('.scroll-reveal').forEach(el => {
-            observer.observe(el);
-        });
-
-        // Order Modal
+        /* ── ORDER MODAL ── */
         function openOrderModal(product = '') {
             const modal = document.getElementById('orderModal');
-            const productSelect = document.getElementById('orderProduct');
-            if (product) {
-                productSelect.value = product;
-            }
+            const sel = document.getElementById('orderProduct');
+            if (product) sel.value = product;
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
         }
-
         function closeOrderModal() {
-            const modal = document.getElementById('orderModal');
-            modal.classList.add('hidden');
+            document.getElementById('orderModal').classList.add('hidden');
             document.body.style.overflow = '';
         }
-
-        // Form submissions
-        document.getElementById('orderForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            closeOrderModal();
-            showToast();
-        });
-
-        document.getElementById('contactForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            showToast();
-            e.target.reset();
-        });
-
+        document.getElementById('orderForm').addEventListener('submit', e => { e.preventDefault(); closeOrderModal(); showToast(); });
+        document.getElementById('contactForm').addEventListener('submit', e => { e.preventDefault(); e.target.reset(); showToast(); });
         function showToast() {
-            const toast = document.getElementById('successToast');
-            toast.classList.remove('hidden');
-            setTimeout(() => {
-                toast.classList.add('hidden');
-            }, 3000);
+            const t = document.getElementById('successToast');
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 3000);
         }
 
-        // Smooth scroll for anchor links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
-                    // Close mobile menu if open
-                    mobileMenu.classList.add('hidden');
-                }
+        /* ── SMOOTH SCROLL ── */
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                const tgt = document.querySelector(a.getAttribute('href'));
+                if (tgt) { e.preventDefault(); tgt.scrollIntoView({ behavior: 'smooth', block: 'start' }); document.getElementById('mobileMenu').classList.add('hidden'); }
             });
         });
 
-        // Initialize first dot as active
-        dots[0].classList.remove('bg-white/50');
-        dots[0].classList.add('bg-white');
+        /* ════════════════════════════════════════════
+           LAVISH WATER DROPLET ANIMATION – canvas
+           ════════════════════════════════════════════ */
+        (function () {
+            const canvas = document.getElementById('dropletCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // Reduce count on mobile for performance
+            const isMobile = () => window.innerWidth < 768;
+            const COUNT = () => isMobile() ? 18 : 38;
+
+            let W, H, drops = [];
+
+            function resize() {
+                W = canvas.width = window.innerWidth;
+                H = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize, { passive: true });
+            resize();
+
+            /* Each drop is a gleaming teardrop */
+            function makeDrop() {
+                const size = Math.random() * 22 + 8;   // 8–30px
+                return {
+                    x: Math.random() * W,
+                    y: Math.random() * H,
+                    vx: (Math.random() - 0.5) * 0.35,
+                    vy: Math.random() * 0.4 + 0.15,    // gentle downward drift
+                    size,
+                    baseSize: size,
+                    alpha: Math.random() * 0.35 + 0.10,  // 0.10–0.45
+                    phase: Math.random() * Math.PI * 2,   // wobble phase
+                    speed: Math.random() * 0.015 + 0.008, // wobble speed
+                    hue: Math.random() * 30 + 190,      // 190–220 → blue-cyan
+                    sat: Math.random() * 30 + 60,       // 60–90%
+                    lit: Math.random() * 20 + 55,       // 55–75%
+                    shimmer: Math.random(),                  // shimmer offset
+                };
+            }
+
+            function initDrops() {
+                drops = [];
+                const n = COUNT();
+                for (let i = 0; i < n; i++) drops.push(makeDrop());
+            }
+            initDrops();
+            window.addEventListener('resize', initDrops, { passive: true });
+
+            /* Draw a stylish teardrop */
+            function drawDrop(d, t) {
+                const wobble = Math.sin(d.phase + t * d.speed) * 2;
+                const s = d.baseSize + wobble;
+                const x = d.x, y = d.y;
+
+                ctx.save();
+                ctx.translate(x, y);
+
+                // Outer glow
+                const glow = ctx.createRadialGradient(0, -s * 0.2, s * 0.05, 0, 0, s * 1.1);
+                glow.addColorStop(0, `hsla(${d.hue},${d.sat}%,85%,${d.alpha * 0.9})`);
+                glow.addColorStop(0.5, `hsla(${d.hue},${d.sat}%,${d.lit}%,${d.alpha * 0.55})`);
+                glow.addColorStop(1, `hsla(${d.hue},${d.sat}%,${d.lit}%,0)`);
+
+                ctx.beginPath();
+                // Teardrop shape: circle bottom + pointed top
+                ctx.moveTo(0, -s);
+                ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s);
+                ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s);
+                ctx.closePath();
+
+                ctx.fillStyle = glow;
+                ctx.fill();
+
+                // Inner highlight (shimmer)
+                const shimmerAlpha = (Math.sin(t * 0.04 + d.shimmer * 6) * 0.5 + 0.5) * d.alpha * 0.7;
+                const hl = ctx.createRadialGradient(-s * 0.2, -s * 0.35, 0, -s * 0.2, -s * 0.35, s * 0.5);
+                hl.addColorStop(0, `rgba(255,255,255,${shimmerAlpha})`);
+                hl.addColorStop(1, `rgba(255,255,255,0)`);
+                ctx.beginPath();
+                ctx.moveTo(0, -s);
+                ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s);
+                ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s);
+                ctx.closePath();
+                ctx.fillStyle = hl;
+                ctx.fill();
+
+                ctx.restore();
+            }
+
+            let t = 0;
+            function animate() {
+                ctx.clearRect(0, 0, W, H);
+                t++;
+
+                drops.forEach(d => {
+                    d.x += d.vx + Math.sin(t * 0.007 + d.phase) * 0.2;
+                    d.y += d.vy;
+                    d.phase += d.speed * 0.5;
+
+                    // wrap
+                    if (d.y > H + d.baseSize * 2) { d.y = -d.baseSize * 2; d.x = Math.random() * W; }
+                    if (d.x > W + 40) d.x = -40;
+                    if (d.x < -40) d.x = W + 40;
+
+                    drawDrop(d, t);
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
+        })();
     </script>
 </body>
 
