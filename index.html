@@ -6,19 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Urban Waters – Purified Drinking Water</title>
 
-    <!-- Preconnect for speed -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
-
-    <!-- Critical font only -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <!-- Tailwind CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <!-- Lucide icons (defer) -->
     <script src="https://unpkg.com/lucide@latest" defer></script>
 
     <script>
@@ -40,7 +33,15 @@
             font-family: 'Poppins', sans-serif
         }
 
-        /* ── WATER DROPLET CANVAS ── */
+        /* ── FIX: Prevent horizontal overflow ── */
+        html,
+        body {
+            max-width: 100%;
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
         #dropletCanvas {
             position: fixed;
             top: 0;
@@ -51,13 +52,14 @@
             z-index: 1;
         }
 
-        /* ── CAROUSEL – fills container perfectly ── */
+        /* ── FIX: Hero truly full-width on mobile ── */
         .hero-wrap {
             position: relative;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
             min-height: 600px;
             overflow: hidden;
+            margin-left: calc(-50vw + 50%);
         }
 
         .slide {
@@ -72,7 +74,6 @@
             opacity: 1
         }
 
-        /* media fills slide */
         .slide-media {
             position: absolute;
             inset: 0;
@@ -80,7 +81,6 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-            /* lazy-load via JS */
         }
 
         .slide-overlay {
@@ -106,6 +106,17 @@
             background: rgba(255, 255, 255, .95) !important;
             backdrop-filter: blur(20px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, .1)
+        }
+
+        /* ── FIX: Mobile menu button – always visible ── */
+        #mobileMenuBtn {
+            color: #0369a1;
+            /* primary-700 – visible on both light and dark backgrounds */
+        }
+
+        /* When nav is scrolled (white bg), keep it dark */
+        .nav-scrolled #mobileMenuBtn {
+            color: #0369a1;
         }
 
         /* ── GENERAL ── */
@@ -228,7 +239,6 @@
             animation: waPulse 2s infinite
         }
 
-        /* ── SLIDE DOTS ── */
         .slide-dot {
             width: .75rem;
             height: .75rem;
@@ -244,12 +254,10 @@
             transform: scale(1.3)
         }
 
-        /* counter */
         .counter-value {
             font-variant-numeric: tabular-nums
         }
 
-        /* ── RESPONSIVE VIDEO/IMG ── */
         @media(max-width:640px) {
             .slide-content .max-w-2xl h1 {
                 font-size: 2.5rem !important;
@@ -275,7 +283,6 @@
 
 <body class="bg-slate-80 text-slate-800 overflow-x-hidden">
 
-    <!-- ░░ DROPLET CANVAS (behind everything) ░░ -->
     <canvas id="dropletCanvas" aria-hidden="true"></canvas>
 
     <!-- ░░ NAV ░░ -->
@@ -302,7 +309,7 @@
                         class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Products</a>
                     <a href="#services"
                         class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Services</a>
-                    <a href="#branches"
+                    <a href="branches.html"
                         class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">Branches</a>
                     <a href="#about"
                         class="text-slate-800 hover:text-aqua-300 font-medium transition-colors drop-shadow">About</a>
@@ -319,7 +326,8 @@
                         class="btn-primary text-white px-6 py-3 rounded-full font-semibold ripple">Order Now</button>
                 </div>
 
-                <button id="mobileMenuBtn" class="lg:hidden p-2 text-white">
+                <!-- FIX: removed text-white, now uses CSS rule above (#0369a1 blue) -->
+                <button id="mobileMenuBtn" class="lg:hidden p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
@@ -342,7 +350,6 @@
     <!-- ░░ HERO CAROUSEL ░░ -->
     <section id="home" class="hero-wrap">
 
-        <!-- Slide 1 – Water flowing video -->
         <div class="slide active" id="slide-0">
             <video class="slide-media" autoplay muted loop playsinline preload="auto">
                 <source src="Water flowing video (No Audio).mp4" type="video/mp4">
@@ -371,7 +378,6 @@
             </div>
         </div>
 
-        <!-- Slide 2 – Lady car image -->
         <div class="slide" id="slide-1">
             <img class="slide-media" src="Lady car.jpg" alt="Water refill station" loading="lazy">
             <div class="slide-overlay"></div>
@@ -398,7 +404,6 @@
             </div>
         </div>
 
-        <!-- Slide 3 – Water pouring video -->
         <div class="slide" id="slide-2">
             <video class="slide-media" muted loop playsinline preload="none">
                 <source src="FREEDIO_ _Water pouring into glass slow motion_ royalty free HD stock video footage.mp4"
@@ -428,7 +433,6 @@
             </div>
         </div>
 
-        <!-- Slide 4 – Man delivery video -->
         <div class="slide" id="slide-3">
             <video class="slide-media" muted loop playsinline preload="none">
                 <source src="Man delivery.mp4" type="video/mp4">
@@ -443,8 +447,7 @@
                         <h1 class="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-5 leading-tight">
                             City-Wide<br><span class="text-aqua-300">Coverage</span></h1>
                         <p class="text-lg md:text-xl text-white/85 mb-8 max-w-lg">11+ Independent branches in Nairobi,
-                            serving 3
-                            major cities in Kenya. Fresh water delivered to your doorstep.</p>
+                            serving 3 major cities in Kenya. Fresh water delivered to your doorstep.</p>
                         <div class="flex flex-wrap gap-4">
                             <button onclick="openOrderModal()"
                                 class="btn-primary text-white px-8 py-4 rounded-full font-semibold text-lg ripple">Order
@@ -458,7 +461,6 @@
             </div>
         </div>
 
-        <!-- Slide 5 – People drinking video -->
         <div class="slide" id="slide-4">
             <video class="slide-media" muted loop playsinline preload="none">
                 <source src="People drinking.mp4" type="video/mp4">
@@ -487,7 +489,6 @@
             </div>
         </div>
 
-        <!-- Dots -->
         <div class="absolute bottom-28 left-1/2 -translate-x-1/2 z-10 flex gap-3" id="slideDots">
             <button class="slide-dot active" onclick="goToSlide(0)" aria-label="Slide 1"></button>
             <button class="slide-dot" onclick="goToSlide(1)" aria-label="Slide 2"></button>
@@ -496,7 +497,6 @@
             <button class="slide-dot" onclick="goToSlide(4)" aria-label="Slide 5"></button>
         </div>
 
-        <!-- Wave -->
         <div class="wave-bottom">
             <svg viewBox="0 0 1200 60" preserveAspectRatio="none">
                 <path
@@ -513,8 +513,7 @@
                 <div class="text-center scroll-reveal">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="map-pin" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="map-pin" class="w-8 h-8 text-white"></i></div>
                     <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
                             data-target="11">0</span>+</div>
                     <p class="text-slate-600 font-medium">Branches in Nairobi</p>
@@ -522,8 +521,7 @@
                 <div class="text-center scroll-reveal" style="transition-delay:.1s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="building-2" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="building-2" class="w-8 h-8 text-white"></i></div>
                     <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
                             data-target="3">0</span></div>
                     <p class="text-slate-600 font-medium">Major Cities Covered</p>
@@ -531,8 +529,7 @@
                 <div class="text-center scroll-reveal" style="transition-delay:.2s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="users" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="users" class="w-8 h-8 text-white"></i></div>
                     <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
                             data-target="10000">0</span>+</div>
                     <p class="text-slate-600 font-medium">Happy Customers</p>
@@ -540,8 +537,7 @@
                 <div class="text-center scroll-reveal" style="transition-delay:.3s">
                     <div
                         class="w-16 h-16 mx-auto mb-4 rounded-2xl water-gradient flex items-center justify-center shadow-lg">
-                        <i data-lucide="droplet" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="droplet" class="w-8 h-8 text-white"></i></div>
                     <div class="text-4xl md:text-5xl font-bold text-slate-800 mb-2"><span class="counter-value"
                             data-target="50000">0</span>+</div>
                     <p class="text-slate-600 font-medium">Litres Monthly</p>
@@ -563,11 +559,9 @@
                     perfect water solution for you.</p>
             </div>
 
-            <!-- Refills -->
             <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal"><i
                     data-lucide="refresh-cw" class="w-6 h-6 text-primary-600"></i> Water Refill Services</h3>
             <div class="grid md:grid-cols-3 gap-8 mb-16">
-                <!-- 5L -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 flex items-center justify-center bg-white-100">
                         <img src="5L bottle.jpeg" alt="5L Refill"
@@ -576,22 +570,19 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-primary-600">KSh 100</span><span
-                                class="text-xs text-slate-500">/refill</span>
-                        </div>
+                                class="text-xs text-slate-500">/refill</span></div>
                         <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                            <span class="text-lg font-bold text-aqua-600">KSh 150</span>
-                            <span class="text-xs text-slate-500">/New</span>
-                        </div>
+                            <span class="text-lg font-bold text-aqua-600">KSh 150</span><span
+                                class="text-xs text-slate-500">/New</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">5L Refill</h4>
-                        <p class="text-slate-600 mb-5">Perfect for small families and personal use</p><button
-                            onclick="openOrderModal('5L Refill')"
+                        <p class="text-slate-600 mb-5">Perfect for small families and personal use</p>
+                        <button onclick="openOrderModal('5L Refill')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- 10L -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 flex items-center justify-center bg-white-100">
                         <img src="10L bottle.jpeg" alt="10L Refill"
@@ -600,22 +591,19 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-primary-600">KSh 180</span><span
-                                class="text-xs text-slate-500">/refill</span>
-                        </div>
+                                class="text-xs text-slate-500">/refill</span></div>
                         <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-aqua-600">KSh 250</span><span
-                                class="text-xs text-slate-500">/New</span>
-                        </div>
+                                class="text-xs text-slate-500">/New</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">10L Refill</h4>
-                        <p class="text-slate-600 mb-5">Ideal for medium-sized families</p><button
-                            onclick="openOrderModal('10L Refill')"
+                        <p class="text-slate-600 mb-5">Ideal for medium-sized families</p>
+                        <button onclick="openOrderModal('10L Refill')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- 20L -->
                 <div
                     class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500">
                     <div
@@ -628,36 +616,31 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-aqua-600">KSh 350</span><span
-                                class="text-xs text-slate-500">/refill</span>
-                        </div>
+                                class="text-xs text-slate-500">/refill</span></div>
                         <div class="absolute bottom-4 right-4 flex flex-col gap-2">
                             <div
                                 class="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow flex items-center gap-2">
-                                <span class="text-lg font-bold text-aqua-600">KSh 450</span>
-                                <span class="text-xs text-slate-500">/Soft New</span>
-                            </div>
+                                <span class="text-lg font-bold text-aqua-600">KSh 450</span><span
+                                    class="text-xs text-slate-500">/Soft New</span></div>
                             <div
                                 class="bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow flex items-center gap-2">
-                                <span class="text-lg font-bold text-aqua-600">KSh 1500</span>
-                                <span class="text-xs text-slate-500">/Hard New</span>
-                            </div>
+                                <span class="text-lg font-bold text-aqua-600">KSh 1500</span><span
+                                    class="text-xs text-slate-500">/Hard New</span></div>
                         </div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">20L Refill</h4>
-                        <p class="text-slate-600 mb-5">Best value for large families &amp; offices</p><button
-                            onclick="openOrderModal('20L Refill')"
+                        <p class="text-slate-600 mb-5">Best value for large families &amp; offices</p>
+                        <button onclick="openOrderModal('20L Refill')"
                             class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
             </div>
 
-            <!-- Bottled -->
             <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal"><i
                     data-lucide="wine" class="w-6 h-6 text-primary-600"></i> Bottled Drinking Water</h3>
             <div class="grid md:grid-cols-3 gap-8">
-                <!-- 300ml -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 flex items-center justify-center bg-white-100">
                         <img src="300ml.jpg" alt="300ml Bottle"
@@ -666,18 +649,16 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-primary-600">KSh 30</span><span
-                                class="text-xs text-slate-500">/bottle</span>
-                        </div>
+                                class="text-xs text-slate-500">/bottle</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">300ml Bottle</h4>
-                        <p class="text-slate-600 mb-5">Perfect for events and quick refreshment</p><button
-                            onclick="openOrderModal('300ml Bottle')"
+                        <p class="text-slate-600 mb-5">Perfect for events and quick refreshment</p>
+                        <button onclick="openOrderModal('300ml Bottle')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- 500ml -->
                 <div
                     class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500">
                     <div
@@ -690,18 +671,16 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-aqua-600">KSh 50</span><span
-                                class="text-xs text-slate-500">/bottle</span>
-                        </div>
+                                class="text-xs text-slate-500">/bottle</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">500ml Bottle</h4>
-                        <p class="text-slate-600 mb-5">Standard size for everyday hydration</p><button
-                            onclick="openOrderModal('500ml')"
+                        <p class="text-slate-600 mb-5">Standard size for everyday hydration</p>
+                        <button onclick="openOrderModal('500ml')"
                             class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- 1L -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 flex items-center justify-center bg-white-100">
                         <img src="1Litre.jpg" alt="1L Bottle"
@@ -709,14 +688,13 @@
                             loading="lazy" width="400" height="224">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                            <span class="text-lg font-bold text-primary-600">KSh 80</span><span
-                                class="text-xs text-slate-500">/bottle</span>
-                        </div>
+                            <span class="text-lg font-bold text-primary-600">KSh 70</span><span
+                                class="text-xs text-slate-500">/bottle</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">1L Bottle</h4>
-                        <p class="text-slate-600 mb-5">Great value for longer hydration needs</p><button
-                            onclick="openOrderModal('1L Bottle')"
+                        <p class="text-slate-600 mb-5">Great value for longer hydration needs</p>
+                        <button onclick="openOrderModal('1L Bottle')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
@@ -724,23 +702,20 @@
             </div>
         </div>
 
-        <!-- Other Products -->
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16 scroll-reveal">
                 <span
                     class="inline-block px-4 py-2 bg-primary-100 text-primary-700 rounded-full text-sm font-semibold mb-4 mt-8">Other
                     Products</span>
                 <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">Everything You Need for Your
-                    Hydration<span class="text-primary-600">All in One Place</span></h2>
+                    Hydration<span class="text-primary-600"> All in One Place</span></h2>
                 <p class="text-lg text-slate-600 max-w-2xl mx-auto">Enjoy clean water, easy-to-use dispenser pumps,
                     fresh ice cubes, and exclusive loyalty rewards designed to make your experience simple and
                     rewarding.</p>
             </div>
-            <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal">
-                <i data-lucide="droplets" class="w-6 h-6 text-primary-600"></i> Beyond Hydration
-            </h3>
+            <h3 class="text-2xl font-bold text-slate-800 mb-8 flex items-center gap-3 scroll-reveal"><i
+                    data-lucide="droplets" class="w-6 h-6 text-primary-600"></i> Beyond Hydration</h3>
             <div class="grid md:grid-cols-3 gap-8 mb-16">
-                <!-- Dispenser pump -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 overflow-hidden">
                         <img src="Water pump.png" alt="Rechargable Pump"
@@ -748,19 +723,17 @@
                             loading="lazy" width="400" height="224">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                            <span class="text-lg font-bold text-primary-600">KSh 1500</span><span
-                                class="text-xs text-slate-500"></span>
-                        </div>
+                            <span class="text-lg font-bold text-primary-600">KSh 1500</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">Premium Rechargable pumps</h4>
                         <p class="text-slate-600 mb-5">Upgrade your refill experience with our easy-to-use Rechargable
-                            pumps.</p><button onclick="openOrderModal('Rechargable Pump')"
+                            pumps.</p>
+                        <button onclick="openOrderModal('Rechargable Pump')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- Ice cubes -->
                 <div class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-lg">
                     <div class="relative h-56 overflow-hidden">
                         <img src="ice cubes.jpg" alt="Ice Cubes"
@@ -768,19 +741,18 @@
                             loading="lazy" width="400" height="224">
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
-                            <span class="text-lg font-bold text-primary-600">KSh 100</span><span
-                                class="text-xs text-slate-500">/per kg</span>
-                        </div>
+                            <span class="text-lg font-bold text-primary-600">KSh 70</span><span
+                                class="text-xs text-slate-500">/per kg</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">Ice Cubes</h4>
-                        <p class="text-slate-600 mb-5">Pure, clean, and long-lasting ice cubes.
-                            Available at your nearest branch.</p><button onclick="openOrderModal('Ice Cubes')"
+                        <p class="text-slate-600 mb-5">Pure, clean, and long-lasting ice cubes. Available at your
+                            nearest branch.</p>
+                        <button onclick="openOrderModal('Ice Cubes')"
                             class="w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition-all">Order
                             Now</button>
                     </div>
                 </div>
-                <!-- Loyalty Points -->
                 <div
                     class="product-card group relative bg-white rounded-3xl overflow-hidden shadow-xl ring-2 ring-aqua-500">
                     <div
@@ -793,20 +765,19 @@
                         <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"></div>
                         <div class="absolute bottom-4 left-4 bg-white/90 backdrop-blur-md px-4 py-2 rounded-xl shadow">
                             <span class="text-lg font-bold text-aqua-600">35 Points</span><span
-                                class="text-xs text-slate-500">/refill</span>
-                        </div>
+                                class="text-xs text-slate-500">/refill</span></div>
                     </div>
                     <div class="p-6 text-center">
                         <h4 class="text-xl font-bold text-slate-800 mb-2">Loyalty Points</h4>
                         <p class="text-slate-600 mb-5">Earn points with every purchase and redeem them for discounts.
-                        </p><button onclick="openOrderModal('Loyalty Points')"
+                        </p>
+                        <button onclick="openOrderModal('Loyalty Points')"
                             class="w-full py-3 rounded-xl bg-aqua-600 text-white font-semibold hover:bg-aqua-700 transition-all">Enroll
                             Now</button>
                     </div>
                 </div>
             </div>
-
-
+        </div>
     </section>
 
     <!-- ░░ SERVICES ░░ -->
@@ -826,8 +797,7 @@
                     class="service-card bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-all scroll-reveal">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="refresh-cw" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="refresh-cw" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Water Refill Stations</h4>
                     <p class="text-slate-600 mb-4">Visit any of our 11+ branches in Nairobi for quick and affordable
                         water refills.</p>
@@ -839,8 +809,7 @@
                     style="transition-delay:.1s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="truck" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="truck" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Home &amp; Office Delivery</h4>
                     <p class="text-slate-600 mb-4">Fresh water delivered to your doorstep. Same-day delivery available
                         in select areas.</p>
@@ -852,8 +821,7 @@
                     style="transition-delay:.2s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="building" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="building" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Bulk Supply for Business</h4>
                     <p class="text-slate-600 mb-4">Special rates for hotels, restaurants, schools, and corporate
                         clients.</p>
@@ -865,8 +833,7 @@
                     style="transition-delay:.3s">
                     <div
                         class="service-icon w-16 h-16 rounded-2xl water-gradient flex items-center justify-center mb-6 shadow-lg">
-                        <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i>
-                    </div>
+                        <i data-lucide="calendar-check" class="w-8 h-8 text-white"></i></div>
                     <h4 class="text-xl font-bold text-slate-800 mb-3">Subscription Plans</h4>
                     <p class="text-slate-600 mb-4">Weekly or monthly subscriptions with automatic delivery and exclusive
                         discounts.</p>
@@ -927,14 +894,11 @@
                     <p class="text-primary-100 text-sm">Expanding to serve Western Kenya</p>
                 </div>
             </div>
-
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <!-- Nairobi branches -->
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Westlands</h5>
                             <p class="text-sm text-slate-600">Ambience Mall</p>
@@ -948,8 +912,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Parklands</h5>
                             <p class="text-sm text-slate-600">Highridge Mall</p>
@@ -963,8 +926,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Kilimani</h5>
                             <p class="text-sm text-slate-600">Behind Adlife Plaza</p>
@@ -978,8 +940,7 @@
                     style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Karen</h5>
                             <p class="text-sm text-slate-600">Karen Square</p>
@@ -992,8 +953,7 @@
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Lavington</h5>
                             <p class="text-sm text-slate-600">105 James Gichuru Rd</p>
@@ -1007,8 +967,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Kileleshwa</h5>
                             <p class="text-sm text-slate-600">G's Arcade, Kieni Rd</p>
@@ -1022,8 +981,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">South B</h5>
                             <p class="text-sm text-slate-600">LA Enzi Plaza</p>
@@ -1037,8 +995,7 @@
                     style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Langata</h5>
                             <p class="text-sm text-slate-600">Bethel Business Center</p>
@@ -1051,8 +1008,7 @@
                 <div class="branch-card bg-slate-50 rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Mbaazi</h5>
                             <p class="text-sm text-slate-600">Westfield Mall, Valley Arcade</p>
@@ -1066,8 +1022,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Chaka</h5>
                             <p class="text-sm text-slate-600">Chaka Road Mall</p>
@@ -1081,8 +1036,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Gachie</h5>
                             <p class="text-sm text-slate-600">Westbay Mall, opp. Nyari Estate</p>
@@ -1093,12 +1047,11 @@
                     </div>
                 </div>
                 <div class="branch-card bg-primary-50 rounded-xl p-5 border-2 border-primary-200 flex items-center justify-center scroll-reveal"
-                    style="transition-delay:.15s"><a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+                    style="transition-delay:.15s"><a href="branches.html" target="_blank" rel="noopener"
                         class="text-center">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full bg-primary-600 flex items-center justify-center">
-                            <i data-lucide="plus" class="w-6 h-6 text-white"></i>
-                        </div>
+                            <i data-lucide="plus" class="w-6 h-6 text-white"></i></div>
                         <p class="text-sm font-semibold text-primary-700">More Coming Soon</p>
                     </a></div>
             </div>
@@ -1118,8 +1071,7 @@
                 <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour TRM</h5>
                             <p class="text-sm text-slate-600">Thika Road Mall</p>
@@ -1131,8 +1083,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Mega</h5>
                             <p class="text-sm text-slate-600">Uhuru Highway</p>
@@ -1144,8 +1095,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Two Rivers</h5>
                             <p class="text-sm text-slate-600">Two Rivers Mall</p>
@@ -1157,8 +1107,7 @@
                     style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour The Nord</h5>
                             <p class="text-sm text-slate-600">Ruiru</p>
@@ -1169,8 +1118,7 @@
                 <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour The Hub</h5>
                             <p class="text-sm text-slate-600">The Hub Mall, Karen</p>
@@ -1182,8 +1130,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Sarit</h5>
                             <p class="text-sm text-slate-600">Sarit Centre, Westlands</p>
@@ -1195,8 +1142,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Galleria</h5>
                             <p class="text-sm text-slate-600">Galleria Mall, Langata</p>
@@ -1208,8 +1154,7 @@
                     style="transition-delay:.15s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Eastleigh</h5>
                             <p class="text-sm text-slate-600">Eastleigh Business Bay Square</p>
@@ -1220,8 +1165,7 @@
                 <div class="branch-card bg-white rounded-xl p-5 border-2 border-transparent scroll-reveal">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Runda</h5>
                             <p class="text-sm text-slate-600">Runda Mall</p>
@@ -1233,8 +1177,7 @@
                     style="transition-delay:.05s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour United Mall</h5>
                             <p class="text-sm text-slate-600">United Mall, Kisumu</p>
@@ -1246,8 +1189,7 @@
                     style="transition-delay:.1s">
                     <div class="flex items-start gap-3">
                         <div class="w-10 h-10 rounded-lg water-gradient flex items-center justify-center flex-shrink-0">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i>
-                        </div>
+                            <i data-lucide="map-pin" class="w-5 h-5 text-white"></i></div>
                         <div>
                             <h5 class="font-bold text-slate-800">Carrefour Mombasa</h5>
                             <p class="text-sm text-slate-600">City Mall Nyali, Prominade &amp; Diani</p>
@@ -1256,19 +1198,18 @@
                     </div>
                 </div>
                 <div class="branch-card bg-primary-50 rounded-xl p-5 border-2 border-primary-200 flex items-center justify-center scroll-reveal"
-                    style="transition-delay:.15s"><a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+                    style="transition-delay:.15s"><a href="branches.html" target="_blank" rel="noopener"
                         class="text-center">
                         <div
                             class="w-12 h-12 mx-auto mb-2 rounded-full bg-primary-600 flex items-center justify-center">
-                            <i data-lucide="plus" class="w-6 h-6 text-white"></i>
-                        </div>
+                            <i data-lucide="plus" class="w-6 h-6 text-white"></i></div>
                         <p class="text-sm font-semibold text-primary-700">More Coming Soon</p>
                     </a></div>
             </div>
         </div>
     </section>
 
-    <!-- ░░ ABOUT / WHY US ░░ -->
+    <!-- ░░ ABOUT ░░ -->
     <section id="about" class="py-20 bg-white relative z-2">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid lg:grid-cols-2 gap-16 items-center">
@@ -1284,8 +1225,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="shield-check" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Clean &amp; Safe Water</h4>
                                 <p class="text-slate-600">Multi-stage purification process ensures 99.9% purity.
@@ -1295,8 +1235,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="badge-dollar-sign" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Affordable Pricing</h4>
                                 <p class="text-slate-600">Competitive rates without compromising quality. Bulk discounts
@@ -1306,8 +1245,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="zap" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="zap" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Fast Delivery</h4>
                                 <p class="text-slate-600">Same-day delivery in Nairobi. Reliable scheduling you can
@@ -1317,8 +1255,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="award" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="award" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Reliable Service</h4>
                                 <p class="text-slate-600">10+ years of experience. 10,000+ happy customers trust us
@@ -1328,8 +1265,7 @@
                         <div class="flex items-start gap-4">
                             <div
                                 class="w-12 h-12 rounded-xl water-gradient flex items-center justify-center flex-shrink-0">
-                                <i data-lucide="cpu" class="w-6 h-6 text-white"></i>
-                            </div>
+                                <i data-lucide="cpu" class="w-6 h-6 text-white"></i></div>
                             <div>
                                 <h4 class="font-bold text-slate-800 text-lg">Modern Purification</h4>
                                 <p class="text-slate-600">State-of-the-art RO, UV, and ozone treatment systems.</p>
@@ -1698,8 +1634,8 @@
                             type="number" min="1" value="1"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all">
                     </div>
-                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Delivery Address (Pin Your
-                            Location if Possible) </label><textarea rows="2"
+                    <div><label class="block text-sm font-medium text-slate-700 mb-2">Delivery Address</label><textarea
+                            rows="2"
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-primary-500 focus:ring-2 focus:ring-primary-200 outline-none transition-all resize-none"
                             placeholder="Your delivery address"></textarea></div>
                     <div><label class="block text-sm font-medium text-slate-700 mb-2">Additional Notes</label><textarea
@@ -1714,7 +1650,6 @@
         </div>
     </div>
 
-    <!-- Toast -->
     <div id="successToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 hidden">
         <div class="bg-green-500 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3">
             <i data-lucide="check-circle" class="w-6 h-6"></i>
@@ -1725,9 +1660,7 @@
         </div>
     </div>
 
-    <!-- ░░ SCRIPTS ░░ -->
     <script>
-        /* ── Init Lucide after load ── */
         window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
         document.addEventListener('DOMContentLoaded', () => { if (window.lucide) lucide.createIcons(); });
 
@@ -1735,11 +1668,6 @@
         const navbar = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
             navbar.classList.toggle('nav-scrolled', window.scrollY > 50);
-            // update nav link colors when scrolled
-            const links = navbar.querySelectorAll('a, button:not(#mobileMenuBtn)');
-            links.forEach(l => {
-                if (window.scrollY > 50) { l.style.color = ''; }
-            });
         }, { passive: true });
 
         /* ── Mobile menu ── */
@@ -1750,8 +1678,7 @@
         /* ── HERO CAROUSEL ── */
         const slides = Array.from(document.querySelectorAll('.slide'));
         const dots = Array.from(document.querySelectorAll('.slide-dot'));
-        let current = 0;
-        let autoTimer;
+        let current = 0, autoTimer;
 
         function goToSlide(idx) {
             slides[current].classList.remove('active');
@@ -1759,20 +1686,15 @@
             current = (idx + slides.length) % slides.length;
             slides[current].classList.add('active');
             dots[current].classList.add('active');
-
-            // Play video of the new active slide, pause others
             slides.forEach((s, i) => {
                 const v = s.querySelector('video');
                 if (!v) return;
-                if (i === current) { v.play().catch(() => { }); }
-                else { v.pause(); }
+                if (i === current) { v.play().catch(() => { }); } else { v.pause(); }
             });
         }
 
         function nextSlide() { goToSlide(current + 1); }
         autoTimer = setInterval(nextSlide, 5500);
-
-        // Restart timer on manual nav
         dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(autoTimer); goToSlide(i); autoTimer = setInterval(nextSlide, 5500); }));
 
         /* ── COUNTER ── */
@@ -1780,15 +1702,9 @@
         function runCounters() {
             if (countersRun) return; countersRun = true;
             document.querySelectorAll('.counter-value').forEach(el => {
-                const target = +el.dataset.target;
-                const dur = 2000, step = 16;
-                const inc = target / (dur / step);
-                let val = 0;
-                const tick = () => {
-                    val += inc;
-                    if (val < target) { el.textContent = Math.floor(val).toLocaleString(); requestAnimationFrame(tick); }
-                    else { el.textContent = target.toLocaleString(); }
-                };
+                const target = +el.dataset.target, dur = 2000, step = 16;
+                const inc = target / (dur / step); let val = 0;
+                const tick = () => { val += inc; if (val < target) { el.textContent = Math.floor(val).toLocaleString(); requestAnimationFrame(tick); } else { el.textContent = target.toLocaleString(); } };
                 requestAnimationFrame(tick);
             });
         }
@@ -1818,11 +1734,7 @@
         }
         document.getElementById('orderForm').addEventListener('submit', e => { e.preventDefault(); closeOrderModal(); showToast(); });
         document.getElementById('contactForm').addEventListener('submit', e => { e.preventDefault(); e.target.reset(); showToast(); });
-        function showToast() {
-            const t = document.getElementById('successToast');
-            t.classList.remove('hidden');
-            setTimeout(() => t.classList.add('hidden'), 3000);
-        }
+        function showToast() { const t = document.getElementById('successToast'); t.classList.remove('hidden'); setTimeout(() => t.classList.add('hidden'), 3000); }
 
         /* ── SMOOTH SCROLL ── */
         document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -1832,130 +1744,52 @@
             });
         });
 
-        /* ════════════════════════════════════════════
-           LAVISH WATER DROPLET ANIMATION – canvas
-           ════════════════════════════════════════════ */
+        /* ── WATER DROPLET CANVAS ── */
         (function () {
             const canvas = document.getElementById('dropletCanvas');
-
-            // --- ENHANCED DROPLET VISUALS ---
-
-            // Helper: draw a 3D highlight ellipse
-            function drawHighlight(ctx, s) {
-                ctx.save();
-                ctx.globalAlpha = 0.55;
-                ctx.rotate(-0.25);
-                ctx.beginPath();
-                ctx.ellipse(-s * 0.22, -s * 0.45, s * 0.19, s * 0.09, 0, 0, Math.PI * 2);
-                ctx.closePath();
-                ctx.fillStyle = 'rgba(255,255,255,0.85)';
-                ctx.shadowColor = 'rgba(255,255,255,0.7)';
-                ctx.shadowBlur = 8;
-                ctx.fill();
-                ctx.restore();
-            }
             const ctx = canvas.getContext('2d');
-
-            // Reduce count on mobile for performance
             const isMobile = () => window.innerWidth < 768;
             const COUNT = () => isMobile() ? 18 : 38;
-
             let W, H, drops = [];
 
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
             window.addEventListener('resize', resize, { passive: true });
             resize();
 
-            /* Each drop is a gleaming teardrop */
             function makeDrop() {
-                const size = Math.random() * 22 + 8;   // 8–30px
-                return {
-                    x: Math.random() * W,
-                    y: Math.random() * H,
-                    vx: (Math.random() - 0.5) * 0.35,
-                    vy: Math.random() * 0.4 + 0.15,    // gentle downward drift
-                    size,
-                    baseSize: size,
-                    alpha: Math.random() * 0.35 + 0.10,  // 0.10–0.45
-                    phase: Math.random() * Math.PI * 2,   // wobble phase
-                    speed: Math.random() * 0.015 + 0.008, // wobble speed
-                    hue: Math.random() * 30 + 190,      // 190–220 → blue-cyan
-                    sat: Math.random() * 30 + 60,       // 60–90%
-                    lit: Math.random() * 20 + 55,       // 55–75%
-                    shimmer: Math.random(),                  // shimmer offset
-                };
+                const size = Math.random() * 22 + 8;
+                return { x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.35, vy: Math.random() * 0.4 + 0.15, size, baseSize: size, alpha: Math.random() * 0.35 + 0.10, phase: Math.random() * Math.PI * 2, speed: Math.random() * 0.015 + 0.008, hue: Math.random() * 30 + 190, sat: Math.random() * 30 + 60, lit: Math.random() * 20 + 55, shimmer: Math.random() };
             }
 
-            function initDrops() {
-                drops = [];
-                const n = COUNT();
-                for (let i = 0; i < n; i++) drops.push(makeDrop());
-            }
+            function initDrops() { drops = []; const n = COUNT(); for (let i = 0; i < n; i++) drops.push(makeDrop()); }
             initDrops();
             window.addEventListener('resize', initDrops, { passive: true });
 
-            /* Draw a stylish teardrop */
             function drawDrop(d, t) {
-                const wobble = Math.sin(d.phase + t * d.speed) * 2;
-                const s = d.baseSize + wobble;
-                const x = d.x, y = d.y;
-
-                ctx.save();
-                ctx.translate(x, y);
-
-                // Outer glow
+                const wobble = Math.sin(d.phase + t * d.speed) * 2, s = d.baseSize + wobble;
+                ctx.save(); ctx.translate(d.x, d.y);
                 const glow = ctx.createRadialGradient(0, -s * 0.2, s * 0.05, 0, 0, s * 1.1);
                 glow.addColorStop(0, `hsla(${d.hue},${d.sat}%,85%,${d.alpha * 0.9})`);
                 glow.addColorStop(0.5, `hsla(${d.hue},${d.sat}%,${d.lit}%,${d.alpha * 0.55})`);
                 glow.addColorStop(1, `hsla(${d.hue},${d.sat}%,${d.lit}%,0)`);
-
-                ctx.beginPath();
-                // Teardrop shape: circle bottom + pointed top
-                ctx.moveTo(0, -s);
-                ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s);
-                ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s);
-                ctx.closePath();
-
-                ctx.fillStyle = glow;
-                ctx.fill();
-
-                // Inner highlight (shimmer)
+                ctx.beginPath(); ctx.moveTo(0, -s); ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s); ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s); ctx.closePath();
+                ctx.fillStyle = glow; ctx.fill();
                 const shimmerAlpha = (Math.sin(t * 0.04 + d.shimmer * 6) * 0.5 + 0.5) * d.alpha * 0.7;
                 const hl = ctx.createRadialGradient(-s * 0.2, -s * 0.35, 0, -s * 0.2, -s * 0.35, s * 0.5);
-                hl.addColorStop(0, `rgba(255,255,255,${shimmerAlpha})`);
-                hl.addColorStop(1, `rgba(255,255,255,0)`);
-                ctx.beginPath();
-                ctx.moveTo(0, -s);
-                ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s);
-                ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s);
-                ctx.closePath();
-                ctx.fillStyle = hl;
-                ctx.fill();
-
-                ctx.restore();
+                hl.addColorStop(0, `rgba(255,255,255,${shimmerAlpha})`); hl.addColorStop(1, `rgba(255,255,255,0)`);
+                ctx.beginPath(); ctx.moveTo(0, -s); ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s); ctx.bezierCurveTo(-s * 0.85, s * 0.4, -s * 0.6, -s * 0.2, 0, -s); ctx.closePath();
+                ctx.fillStyle = hl; ctx.fill(); ctx.restore();
             }
 
             let t = 0;
             function animate() {
-                ctx.clearRect(0, 0, W, H);
-                t++;
-
+                ctx.clearRect(0, 0, W, H); t++;
                 drops.forEach(d => {
-                    d.x += d.vx + Math.sin(t * 0.007 + d.phase) * 0.2;
-                    d.y += d.vy;
-                    d.phase += d.speed * 0.5;
-
-                    // wrap
+                    d.x += d.vx + Math.sin(t * 0.007 + d.phase) * 0.2; d.y += d.vy; d.phase += d.speed * 0.5;
                     if (d.y > H + d.baseSize * 2) { d.y = -d.baseSize * 2; d.x = Math.random() * W; }
-                    if (d.x > W + 40) d.x = -40;
-                    if (d.x < -40) d.x = W + 40;
-
+                    if (d.x > W + 40) d.x = -40; if (d.x < -40) d.x = W + 40;
                     drawDrop(d, t);
                 });
-
                 requestAnimationFrame(animate);
             }
             animate();
