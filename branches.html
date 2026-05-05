@@ -468,9 +468,12 @@
 
         .branch-meta {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 0.5rem;
+            flex-direction: column;
+            /* Stack items vertically */
+            align-items: flex-start;
+            /* Align left (or use 'center' if preferred) */
+            gap: 0.4rem;
+            /* Spacing between phone and hours */
         }
 
         .branch-phone {
@@ -495,6 +498,8 @@
             padding: 2px 8px;
             border-radius: 999px;
             white-space: nowrap;
+            align-self: flex-start;
+            /* Ensures it doesn't stretch full-width */
         }
 
         /* ── MORE CARD ── */
@@ -645,9 +650,12 @@
             background: #d1fae5;
             padding: 1px 7px;
             border-radius: 999px;
-            display: inline-block;
+            display: block;
             margin-top: 4px;
+            width: fit-content;
+            /* Keeps badge compact */
         }
+
 
         /* ── SCROLL REVEAL ── */
         .reveal {
@@ -881,7 +889,7 @@
     <header class="hero">
         <div class="hero-grid"></div>
         <div style="position:relative">
-            <div class="hero-badge">Our Network</div>
+
             <h1>Find Your Nearest<br><span>Water Station</span></h1>
             <p>11+ independent branches across Nairobi plus coverage in Mombasa and Kisumu, pure water always close by.
             </p>
@@ -1005,7 +1013,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 708 700 800</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours"> Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1029,7 +1037,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 740 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1053,7 +1061,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 729 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours"> Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1077,7 +1085,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 792 700 800</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1101,7 +1109,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 708 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1125,7 +1133,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 797 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1149,7 +1157,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 707 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1173,7 +1181,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 728 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1197,7 +1205,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 715 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1221,7 +1229,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 717 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1245,7 +1253,7 @@
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
                         </svg>+254 791 200 300</div>
-                    <span class="branch-hours">8AM – 8PM</span>
+                    <span class="branch-hours">Open 8:30AM – 7:30PM</span>
                 </div>
             </div>
 
@@ -1257,7 +1265,8 @@
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
                     </svg></div>
-                <div class="more-label">More Coming Soon</div>
+                <div class="more-label">More Coming Soon</div> <br> <span class="more-hours">Chat with us</span>
+
             </a>
         </div>
 
@@ -1289,7 +1298,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour TRM</div>
-                        <div class="c-loc">Thika Road Mall</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Thika Road Mall</div><span class="c-hours"> Open 8AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1301,7 +1310,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Mega</div>
-                        <div class="c-loc">Uhuru Highway</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Highway Mall</div><span class="c-hours">Open 7:30AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1313,7 +1322,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Two Rivers</div>
-                        <div class="c-loc">Two Rivers Mall</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Two Rivers Mall</div><span class="c-hours">Open 8AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1324,8 +1333,8 @@
                             <circle cx="12" cy="10" r="3" />
                         </svg></div>
                     <div>
-                        <div class="c-name">Carrefour The Nord</div>
-                        <div class="c-loc">Ruiru</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-name">Carrefour Ruiru</div>
+                        <div class="c-loc">The Nord Mall</div><span class="c-hours">Open 7:30AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1337,7 +1346,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour The Hub</div>
-                        <div class="c-loc">The Hub Mall, Karen</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">The Hub Mall, Karen</div><span class="c-hours">Open 8AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1349,7 +1358,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Sarit</div>
-                        <div class="c-loc">Sarit Centre, Westlands</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Sarit Centre, Westlands</div><span class="c-hours">Open 7:30AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1361,7 +1370,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Galleria</div>
-                        <div class="c-loc">Galleria Mall, Langata</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Galleria Mall, Langata</div><span class="c-hours">Open 8AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1373,7 +1382,8 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Eastleigh</div>
-                        <div class="c-loc">Eastleigh Business Bay Square</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Eastleigh Business Bay Square</div><span class="c-hours">Open 9AM –
+                            10PM</span>
                     </div>
                 </div>
 
@@ -1385,7 +1395,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Runda</div>
-                        <div class="c-loc">Runda Mall</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Runda Mall</div><span class="c-hours">Open 7:30AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1397,7 +1407,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour United Mall</div>
-                        <div class="c-loc">Kisumu</div><span class="c-hours">8AM – 8PM</span>
+                        <div class="c-loc">Kisumu</div><span class="c-hours">Open 8AM – 10PM</span>
                     </div>
                 </div>
 
@@ -1409,8 +1419,56 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Mombasa</div>
-                        <div class="c-loc">City Mall Nyali · Promenade · Diani</div><span class="c-hours">8AM –
-                            8PM</span>
+                        <div class="c-loc">City Mall Nyali · Promenade · Diani</div><span class="c-hours">Open 8AM –
+                            10PM</span>
+                    </div>
+                </div>
+
+                <div class="carrefour-card">
+                    <div class="c-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg></div>
+                    <div>
+                        <div class="c-name">Carrefour Parklands</div>
+                        <div class="c-loc">Parkview Mall</div><span class="c-hours">Open 7:30AM – 10PM</span>
+                    </div>
+                </div>
+
+                <div class="carrefour-card">
+                    <div class="c-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg></div>
+                    <div>
+                        <div class="c-name">Carrefour Rongai</div>
+                        <div class="c-loc">Maasai Mall</div><span class="c-hours">Open 7:30AM – 10PM</span>
+                    </div>
+                </div>
+
+                <div class="carrefour-card">
+                    <div class="c-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg></div>
+                    <div>
+                        <div class="c-name">Carrefour Garden City</div>
+                        <div class="c-loc">Garden City Mall</div><span class="c-hours">Open 8AM – 10PM</span>
+                    </div>
+                </div>
+
+                <div class="carrefour-card">
+                    <div class="c-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                            <circle cx="12" cy="10" r="3" />
+                        </svg></div>
+                    <div>
+                        <div class="c-name">Carrefour Ruai</div>
+                        <div class="c-loc">Warris Mall</div><span class="c-hours">Open 8AM – 8:30PM</span>
                     </div>
                 </div>
 
@@ -1424,7 +1482,8 @@
                             <line x1="5" y1="12" x2="19" y2="12" />
                         </svg>
                     </div>
-                    <span style="font-size:0.78rem;font-weight:600;color:var(--water-deep);">More Soon</span>
+                    <span style="font-size:0.78rem;font-weight:600;color:var(--water-deep);">More Soon</span> <br> <span
+                        class="more-hours" style="display:block; margin-top:4px;">Chat with us</span>
                 </a>
             </div>
         </div>
@@ -1577,12 +1636,16 @@
                             class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all">
                             <option value="">Select an option</option>
                             <option value="5L Refill">5L Refill – KSh 100</option>
+                            <option value="5L Refill">5L NEW – KSh 150</option>
                             <option value="10L Refill">10L Refill – KSh 180</option>
+                            <option value="10L Refill">10L NEW – KSh 250</option>
                             <option value="20L Refill">20L Refill – KSh 350</option>
+                            <option value="20L Refill">20L NEW (Soft)– KSh 450</option>
+                            <option value="20L Refill">20L NEW (Hard) – KSh 1500</option>
                             <option value="300ml Bottle">300ml Bottle – KSh 30</option>
                             <option value="500ml Bottle">500ml Bottle – KSh 50</option>
-                            <option value="1L Bottle">1L Bottle – KSh 80</option>
-                            <option value="Ice Cubes">Ice Cubes – KSh 100</option>
+                            <option value="1L Bottle">1L Bottle – KSh 70</option>
+                            <option value="Ice Cubes">Ice Cubes – KSh 70</option>
                             <option value="Rechargable Pump">Rechargable Pump – KSh 1500</option>
                             <option value="Home Delivery">Home Delivery Service</option>
                             <option value="Business Bulk">Business Bulk Supply</option>
