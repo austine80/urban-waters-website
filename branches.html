@@ -39,7 +39,7 @@
             overflow-x: hidden;
         }
 
-        /* ── DROPLET CANVAS ── */
+        /* ── DROPLET CANVAS – FIX: sits above everything ── */
         #dropletCanvas {
             position: fixed;
             top: 0;
@@ -47,13 +47,15 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 0;
+            z-index: 9999;
+            /* above all content */
         }
 
-        /* ensure all content sits above canvas */
+        /* ensure content is still readable below canvas (pointer-events:none handles clicks) */
         header,
         main,
-        nav {
+        nav,
+        footer {
             position: relative;
             z-index: 2;
         }
@@ -96,7 +98,8 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse 80% 60% at 50% 120%, #06b6d4 0%, transparent 65%),
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 120%, #06b6d4 0%, transparent 65%),
                 radial-gradient(ellipse 60% 40% at 10% -10%, #38bdf8 0%, transparent 55%);
         }
 
@@ -214,6 +217,7 @@
             font-weight: 800;
             color: #fff;
             line-height: 1;
+            font-variant-numeric: tabular-nums;
         }
 
         .city-stat-num span {
@@ -634,6 +638,17 @@
             margin-top: 2px;
         }
 
+        .c-hours {
+            font-size: 0.68rem;
+            font-weight: 600;
+            color: #059669;
+            background: #d1fae5;
+            padding: 1px 7px;
+            border-radius: 999px;
+            display: inline-block;
+            margin-top: 4px;
+        }
+
         /* ── SCROLL REVEAL ── */
         .reveal {
             opacity: 0;
@@ -646,7 +661,7 @@
             transform: translateY(0);
         }
 
-        /* ── FOOTER STRIP ── */
+        /* ── CTA STRIP ── */
         .cta-strip {
             background: linear-gradient(135deg, var(--water-deep), var(--aqua));
             border-radius: 20px;
@@ -700,7 +715,62 @@
             height: 16px;
         }
 
-        @media (max-width: 600px) {
+        /* ── ORDER MODAL ── */
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%);
+            transition: transform .25s, box-shadow .25s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(6, 182, 212, .4);
+        }
+
+        .water-gradient {
+            background: linear-gradient(135deg, #0ea5e9 0%, #06b6d4 50%, #22d3ee 100%);
+        }
+
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, .3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width .55s, height .55s;
+        }
+
+        .ripple:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* ── FOOTER ── */
+        @keyframes waPulse {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1.1)
+            }
+        }
+
+        .whatsapp-float {
+            animation: waPulse 2s infinite;
+        }
+
+        @media(max-width:600px) {
             .cities-grid {
                 grid-template-columns: 1fr;
             }
@@ -723,7 +793,7 @@
             }
         }
 
-        @media (max-width: 420px) {
+        @media(max-width:420px) {
             .branches-grid {
                 grid-template-columns: 1fr;
             }
@@ -737,14 +807,12 @@
 
 <body>
 
-    <!-- ░░ DROPLET CANVAS ░░ -->
     <canvas id="dropletCanvas" aria-hidden="true"></canvas>
 
     <!-- ░░ NAVBAR ░░ -->
     <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 py-4">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between">
-                <!-- Logo -->
                 <a href="index.html" class="flex items-center gap-3 group">
                     <div class="w-14 h-14 rounded-full overflow-hidden shadow-lg flex-shrink-0">
                         <img src="logo.jpg" alt="Urban Waters Logo" class="w-full h-full object-cover" loading="lazy"
@@ -757,7 +825,6 @@
                     </div>
                 </a>
 
-                <!-- Desktop links -->
                 <div class="hidden lg:flex items-center gap-7">
                     <a href="index.html#home"
                         class="text-slate-800 hover:text-sky-500 font-medium transition-colors drop-shadow">Home</a>
@@ -773,26 +840,23 @@
                         class="text-slate-800 hover:text-sky-500 font-medium transition-colors drop-shadow">Contact</a>
                 </div>
 
-                <!-- Desktop CTA -->
                 <div class="hidden lg:flex items-center gap-4">
                     <a href="https://wa.me/254741200300" target="_blank" rel="noopener"
                         class="flex items-center gap-2 text-slate-800 hover:text-green-500 font-medium transition-colors drop-shadow">
                         <i data-lucide="message-circle" class="w-5 h-5"></i><span>WhatsApp</span>
                     </a>
-                    <a href="index.html" class="text-white px-6 py-3 rounded-full font-semibold"
-                        style="background: linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
+                    <button onclick="openOrderModal()" class="text-white px-6 py-3 rounded-full font-semibold"
+                        style="background:linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
                         Order Now
-                    </a>
+                    </button>
                 </div>
 
-                <!-- Mobile menu button -->
                 <button id="mobileMenuBtn" class="lg:hidden p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Mobile dropdown -->
         <div id="mobileMenu" class="hidden lg:hidden bg-white shadow-lg mt-4 mx-4 rounded-2xl overflow-hidden">
             <div class="p-6 space-y-3">
                 <a href="index.html#home" class="block text-slate-700 hover:text-sky-600 font-medium py-2">Home</a>
@@ -804,11 +868,11 @@
                 <a href="index.html#about" class="block text-slate-700 hover:text-sky-600 font-medium py-2">About</a>
                 <a href="index.html#contact"
                     class="block text-slate-700 hover:text-sky-600 font-medium py-2">Contact</a>
-                <a href="index.html"
+                <button onclick="openOrderModal()"
                     class="block w-full text-center text-white px-6 py-3 rounded-full font-semibold mt-2"
-                    style="background: linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
+                    style="background:linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
                     Order Now
-                </a>
+                </button>
             </div>
         </div>
     </nav>
@@ -823,15 +887,17 @@
             </p>
             <div class="city-stats">
                 <div class="city-stat">
-                    <div class="city-stat-num">11<span>+</span></div>
+                    <div class="city-stat-num"><span class="hero-counter" data-target="11" data-suffix="+">0</span>
+                    </div>
                     <div class="city-stat-label">Nairobi Branches</div>
                 </div>
                 <div class="city-stat">
-                    <div class="city-stat-num">3</div>
+                    <div class="city-stat-num"><span class="hero-counter" data-target="3" data-suffix="">0</span></div>
                     <div class="city-stat-label">Major Cities</div>
                 </div>
                 <div class="city-stat">
-                    <div class="city-stat-num">20<span>+</span></div>
+                    <div class="city-stat-num"><span class="hero-counter" data-target="20" data-suffix="+">0</span>
+                    </div>
                     <div class="city-stat-label">Total Locations</div>
                 </div>
             </div>
@@ -917,16 +983,16 @@
         </div>
 
         <div class="branches-grid">
+
+            <!-- helper macro for pin SVG -->
             <!-- Westlands -->
             <div class="branch-card reveal">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Westlands</div>
                         <div class="branch-location">Ambience Mall</div>
@@ -934,14 +1000,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 708 700 800
-                    </div>
+                        </svg>+254 708 700 800</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -949,13 +1012,11 @@
             <!-- Parklands -->
             <div class="branch-card reveal" style="transition-delay:0.05s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Parklands</div>
                         <div class="branch-location">Highridge Mall</div>
@@ -963,14 +1024,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 740 200 300
-                    </div>
+                        </svg>+254 740 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -978,13 +1036,11 @@
             <!-- Kilimani -->
             <div class="branch-card reveal" style="transition-delay:0.1s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Kilimani</div>
                         <div class="branch-location">Behind Adlife Plaza</div>
@@ -992,14 +1048,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 729 200 300
-                    </div>
+                        </svg>+254 729 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1007,13 +1060,11 @@
             <!-- Karen -->
             <div class="branch-card reveal" style="transition-delay:0.15s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Karen</div>
                         <div class="branch-location">Karen Square</div>
@@ -1021,14 +1072,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 792 700 800
-                    </div>
+                        </svg>+254 792 700 800</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1036,13 +1084,11 @@
             <!-- Lavington -->
             <div class="branch-card reveal" style="transition-delay:0.2s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Lavington</div>
                         <div class="branch-location">105 James Gichuru Rd</div>
@@ -1050,14 +1096,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 708 200 300
-                    </div>
+                        </svg>+254 708 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1065,13 +1108,11 @@
             <!-- Kileleshwa -->
             <div class="branch-card reveal" style="transition-delay:0.25s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Kileleshwa</div>
                         <div class="branch-location">G's Arcade, Kieni Rd</div>
@@ -1079,14 +1120,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 797 200 300
-                    </div>
+                        </svg>+254 797 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1094,13 +1132,11 @@
             <!-- South B -->
             <div class="branch-card reveal" style="transition-delay:0.3s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">South B</div>
                         <div class="branch-location">LA Enzi Plaza</div>
@@ -1108,14 +1144,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 707 200 300
-                    </div>
+                        </svg>+254 707 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1123,13 +1156,11 @@
             <!-- Langata -->
             <div class="branch-card reveal" style="transition-delay:0.35s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Langata</div>
                         <div class="branch-location">Bethel Business Center</div>
@@ -1137,14 +1168,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 728 200 300
-                    </div>
+                        </svg>+254 728 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1152,13 +1180,11 @@
             <!-- Mbaazi -->
             <div class="branch-card reveal" style="transition-delay:0.4s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Mbaazi</div>
                         <div class="branch-location">Westfield Mall, Valley Arcade</div>
@@ -1166,14 +1192,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 715 200 300
-                    </div>
+                        </svg>+254 715 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1181,13 +1204,11 @@
             <!-- Chaka -->
             <div class="branch-card reveal" style="transition-delay:0.45s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Chaka</div>
                         <div class="branch-location">Chaka Road Mall</div>
@@ -1195,14 +1216,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 717 200 300
-                    </div>
+                        </svg>+254 717 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1210,13 +1228,11 @@
             <!-- Gachie -->
             <div class="branch-card reveal" style="transition-delay:0.5s">
                 <div class="branch-top">
-                    <div class="branch-pin">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                             <circle cx="12" cy="10" r="3" />
-                        </svg>
-                    </div>
+                        </svg></div>
                     <div>
                         <div class="branch-name">Gachie</div>
                         <div class="branch-location">Westbay Mall, opp. Nyari Estate</div>
@@ -1224,14 +1240,11 @@
                 </div>
                 <div class="branch-divider"></div>
                 <div class="branch-meta">
-                    <div class="branch-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round">
+                    <div class="branch-phone"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path
                                 d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.37a2 2 0 0 1 2-2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                        </svg>
-                        +254 791 200 300
-                    </div>
+                        </svg>+254 791 200 300</div>
                     <span class="branch-hours">8AM – 8PM</span>
                 </div>
             </div>
@@ -1239,18 +1252,16 @@
             <!-- More coming -->
             <a href="https://wa.me/254741200300" target="_blank" rel="noopener" class="branch-card more-card reveal"
                 style="transition-delay:0.55s">
-                <div class="more-icon">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke-width="2.5"
-                        stroke-linecap="round" stroke-linejoin="round">
+                <div class="more-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
+                        stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                         <line x1="12" y1="5" x2="12" y2="19" />
                         <line x1="5" y1="12" x2="19" y2="12" />
-                    </svg>
-                </div>
+                    </svg></div>
                 <div class="more-label">More Coming Soon</div>
             </a>
         </div>
 
-        <!-- Carrefour section -->
+        <!-- ░░ CARREFOUR SECTION ░░ -->
         <div class="carrefour-section reveal">
             <div class="carrefour-header">
                 <div>
@@ -1269,6 +1280,7 @@
             </div>
 
             <div class="carrefour-grid">
+
                 <div class="carrefour-card">
                     <div class="c-pin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
                             stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1277,7 +1289,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour TRM</div>
-                        <div class="c-loc">Thika Road Mall</div>
+                        <div class="c-loc">Thika Road Mall</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1289,7 +1301,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Mega</div>
-                        <div class="c-loc">Uhuru Highway</div>
+                        <div class="c-loc">Uhuru Highway</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1301,7 +1313,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Two Rivers</div>
-                        <div class="c-loc">Two Rivers Mall</div>
+                        <div class="c-loc">Two Rivers Mall</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1313,7 +1325,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour The Nord</div>
-                        <div class="c-loc">Ruiru</div>
+                        <div class="c-loc">Ruiru</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1325,7 +1337,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour The Hub</div>
-                        <div class="c-loc">The Hub Mall, Karen</div>
+                        <div class="c-loc">The Hub Mall, Karen</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1337,7 +1349,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Sarit</div>
-                        <div class="c-loc">Sarit Centre, Westlands</div>
+                        <div class="c-loc">Sarit Centre, Westlands</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1349,7 +1361,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Galleria</div>
-                        <div class="c-loc">Galleria Mall, Langata</div>
+                        <div class="c-loc">Galleria Mall, Langata</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1361,7 +1373,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Eastleigh</div>
-                        <div class="c-loc">Eastleigh Business Bay Square</div>
+                        <div class="c-loc">Eastleigh Business Bay Square</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1373,7 +1385,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Runda</div>
-                        <div class="c-loc">Runda Mall</div>
+                        <div class="c-loc">Runda Mall</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1385,7 +1397,7 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour United Mall</div>
-                        <div class="c-loc">Kisumu</div>
+                        <div class="c-loc">Kisumu</div><span class="c-hours">8AM – 8PM</span>
                     </div>
                 </div>
 
@@ -1397,12 +1409,13 @@
                         </svg></div>
                     <div>
                         <div class="c-name">Carrefour Mombasa</div>
-                        <div class="c-loc">City Mall Nyali · Promenade · Diani</div>
+                        <div class="c-loc">City Mall Nyali · Promenade · Diani</div><span class="c-hours">8AM –
+                            8PM</span>
                     </div>
                 </div>
 
                 <a href="https://wa.me/254741200300" target="_blank" rel="noopener" class="carrefour-card"
-                    style="border:1px dashed #cbd5e1; background:#f8fafc; align-items:center; text-decoration:none; justify-content:center; gap:0.5rem;">
+                    style="border:1px dashed #cbd5e1;background:#f8fafc;align-items:center;text-decoration:none;justify-content:center;gap:0.5rem;">
                     <div
                         style="width:28px;height:28px;border-radius:50%;background:var(--water-deep);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="white"
@@ -1422,16 +1435,194 @@
                 <h3>Can't find a branch near you?</h3>
                 <p>We deliver city-wide — order online or reach us on WhatsApp.</p>
             </div>
-            <a href="https://wa.me/254741200300" target="_blank" rel="noopener" class="cta-btn">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-                </svg>
-                Chat on WhatsApp
-            </a>
+            <div style="display:flex;gap:0.75rem;flex-wrap:wrap;align-items:center;">
+                <button onclick="openOrderModal()" class="cta-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    Order Now
+                </button>
+                <a href="https://wa.me/254741200300" target="_blank" rel="noopener" class="cta-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                    </svg>
+                    Chat on WhatsApp
+                </a>
+            </div>
         </div>
 
     </main>
+
+    <!-- ░░ FOOTER (from index.html) ░░ -->
+    <footer class="bg-slate-900 text-white py-16" style="position:relative;z-index:2;">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <div>
+                    <a href="index.html" class="flex items-center gap-3 group mb-6">
+                        <div class="w-14 h-14 rounded-full overflow-hidden shadow-lg"><img src="logo.jpg" alt="Logo"
+                                class="w-full h-full object-cover" loading="lazy" width="56" height="56"></div>
+                        <div>
+                            <h1 class="text-xl font-bold text-white group-hover:text-cyan-400 transition-colors">Urban
+                                Waters</h1>
+                            <p class="text-xs text-white/70">Purified drinking water</p>
+                        </div>
+                    </a>
+                    <p class="text-slate-400">Kenya's trusted water company since 2014. Delivering purity to thousands
+                        of homes and businesses daily.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#home"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Home</a></li>
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Products</a></li>
+                        <li><a href="index.html#services"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Services</a></li>
+                        <li><a href="branches.html"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Branches</a></li>
+                        <li><a href="index.html#about"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Services</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Water Refills</a></li>
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Bottled Water</a></li>
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Home Delivery</a></li>
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Business Supply</a></li>
+                        <li><a href="index.html#products"
+                                class="text-slate-400 hover:text-cyan-400 transition-colors">Subscriptions</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="font-bold text-lg mb-6">Newsletter</h4>
+                    <p class="text-slate-400 mb-4">Subscribe for updates and exclusive offers.</p>
+                    <form class="flex gap-2" onsubmit="event.preventDefault();showToast();">
+                        <input type="email" placeholder="Your email"
+                            class="flex-1 px-4 py-3 rounded-xl bg-slate-800 border border-slate-700 text-white placeholder-slate-500 focus:border-cyan-500 outline-none">
+                        <button type="submit" class="px-4 py-3 rounded-xl text-white"
+                            style="background:linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            <div class="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-slate-500 text-sm">© 2026 Urban Waters Company. All rights reserved.</p>
+                <div class="flex gap-6 text-sm">
+                    <a href="#" class="text-slate-500 hover:text-cyan-400 transition-colors">Privacy Policy</a>
+                    <a href="#" class="text-slate-500 hover:text-cyan-400 transition-colors">Terms of Service</a>
+                    <a href="#" class="text-slate-500 hover:text-cyan-400 transition-colors">Cookie Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- WhatsApp float -->
+    <a href="https://wa.me/254741200300" target="_blank" rel="noopener"
+        class="whatsapp-float fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-xl hover:scale-110 transition-transform"
+        style="z-index:100;">
+        <i data-lucide="message-circle" class="w-7 h-7 text-white"></i>
+    </a>
+
+    <!-- ░░ ORDER MODAL (synced from index.html) ░░ -->
+    <div id="orderModal" class="fixed inset-0 hidden" style="z-index:200;">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeOrderModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-4">
+            <div class="bg-white rounded-3xl p-8 max-w-md w-full overflow-y-auto relative" style="max-height:90vh;">
+                <button onclick="closeOrderModal()"
+                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center hover:bg-slate-200 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <div class="text-center mb-6">
+                    <div class="w-16 h-16 mx-auto mb-4 rounded-2xl flex items-center justify-center"
+                        style="background:linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">
+                        <i data-lucide="shopping-cart" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800">Place Your Order</h3>
+                    <p class="text-slate-600">Fill in your details and we'll get back to you shortly.</p>
+                </div>
+                <form id="orderForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Full Name *</label>
+                        <input type="text" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                            placeholder="John Doe">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Phone Number *</label>
+                        <input type="tel" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                            placeholder="+254 712 345 678">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Email</label>
+                        <input type="email"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all"
+                            placeholder="john@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Product/Service *</label>
+                        <select id="orderProduct" required
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all">
+                            <option value="">Select an option</option>
+                            <option value="5L Refill">5L Refill – KSh 100</option>
+                            <option value="10L Refill">10L Refill – KSh 180</option>
+                            <option value="20L Refill">20L Refill – KSh 350</option>
+                            <option value="300ml Bottle">300ml Bottle – KSh 30</option>
+                            <option value="500ml Bottle">500ml Bottle – KSh 50</option>
+                            <option value="1L Bottle">1L Bottle – KSh 80</option>
+                            <option value="Ice Cubes">Ice Cubes – KSh 100</option>
+                            <option value="Rechargable Pump">Rechargable Pump – KSh 1500</option>
+                            <option value="Home Delivery">Home Delivery Service</option>
+                            <option value="Business Bulk">Business Bulk Supply</option>
+                            <option value="Subscription">Subscription Plan</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Quantity</label>
+                        <input type="number" min="1" value="1"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Delivery Address</label>
+                        <textarea rows="2"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all resize-none"
+                            placeholder="Your delivery address"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Additional Notes</label>
+                        <textarea rows="2"
+                            class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-200 outline-none transition-all resize-none"
+                            placeholder="Any special requests..."></textarea>
+                    </div>
+                    <button type="submit" class="w-full text-white py-4 rounded-xl font-semibold text-lg ripple"
+                        style="background:linear-gradient(135deg,#0ea5e9 0%,#06b6d4 100%);">Submit Order</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success toast -->
+    <div id="successToast" class="fixed bottom-6 left-1/2 -translate-x-1/2 hidden" style="z-index:300;">
+        <div class="bg-green-500 text-white px-6 py-4 rounded-2xl shadow-xl flex items-center gap-3">
+            <i data-lucide="check-circle" class="w-6 h-6"></i>
+            <div>
+                <p class="font-semibold">Success!</p>
+                <p class="text-sm text-green-100">Your request has been submitted.</p>
+            </div>
+        </div>
+    </div>
 
     <script>
         window.addEventListener('load', () => { if (window.lucide) lucide.createIcons(); });
@@ -1447,27 +1638,74 @@
             document.getElementById('mobileMenu').classList.toggle('hidden');
         });
 
+        /* ── Scroll reveal ── */
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
         }, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        /* ── Hero counters (animate on page load) ── */
+        function runHeroCounters() {
+            document.querySelectorAll('.hero-counter').forEach(el => {
+                const target = +el.dataset.target;
+                const suffix = el.dataset.suffix || '';
+                const dur = 2000, step = 16;
+                const inc = target / (dur / step);
+                let val = 0;
+                const tick = () => {
+                    val += inc;
+                    if (val < target) {
+                        el.textContent = Math.floor(val) + suffix;
+                        requestAnimationFrame(tick);
+                    } else {
+                        el.textContent = target + suffix;
+                    }
+                };
+                requestAnimationFrame(tick);
+            });
+        }
+        // Start counters after a short delay so user sees animation
+        window.addEventListener('load', () => setTimeout(runHeroCounters, 400));
+
+        /* ── ORDER MODAL ── */
+        function openOrderModal(product = '') {
+            const modal = document.getElementById('orderModal');
+            const sel = document.getElementById('orderProduct');
+            if (product) sel.value = product;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            if (window.lucide) lucide.createIcons();
+        }
+
+        function closeOrderModal() {
+            document.getElementById('orderModal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        document.getElementById('orderForm').addEventListener('submit', e => {
+            e.preventDefault();
+            closeOrderModal();
+            showToast();
+        });
+
+        function showToast() {
+            const t = document.getElementById('successToast');
+            t.classList.remove('hidden');
+            setTimeout(() => t.classList.add('hidden'), 3000);
+        }
+
         /* ════════════════════════════════════
-           WATER DROPLET CANVAS ANIMATION
+           WATER DROPLET CANVAS – z-index 9999
+           pointer-events:none keeps all clicks
            ════════════════════════════════════ */
         (function () {
             const canvas = document.getElementById('dropletCanvas');
             const ctx = canvas.getContext('2d');
-
             const isMobile = () => window.innerWidth < 768;
             const COUNT = () => isMobile() ? 20 : 42;
-
             let W, H, drops = [];
 
-            function resize() {
-                W = canvas.width = window.innerWidth;
-                H = canvas.height = window.innerHeight;
-            }
+            function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
             window.addEventListener('resize', resize, { passive: true });
             resize();
 
@@ -1478,40 +1716,32 @@
                     y: Math.random() * H,
                     vx: (Math.random() - 0.5) * 0.3,
                     vy: Math.random() * 0.45 + 0.12,
-                    size,
-                    baseSize: size,
-                    /* keep droplets subtle on white background: lower alpha */
+                    size, baseSize: size,
                     alpha: Math.random() * 0.18 + 0.06,
                     phase: Math.random() * Math.PI * 2,
                     speed: Math.random() * 0.014 + 0.007,
-                    hue: Math.random() * 25 + 195,   /* 195–220: blue-cyan */
+                    hue: Math.random() * 25 + 195,
                     sat: Math.random() * 30 + 60,
                     lit: Math.random() * 20 + 55,
                     shimmer: Math.random(),
                 };
             }
 
-            function initDrops() {
-                drops = [];
-                for (let i = 0; i < COUNT(); i++) drops.push(makeDrop());
-            }
+            function initDrops() { drops = []; for (let i = 0; i < COUNT(); i++) drops.push(makeDrop()); }
             initDrops();
             window.addEventListener('resize', initDrops, { passive: true });
 
             function drawDrop(d, t) {
                 const wobble = Math.sin(d.phase + t * d.speed) * 1.8;
                 const s = d.baseSize + wobble;
-
                 ctx.save();
                 ctx.translate(d.x, d.y);
 
-                /* Outer soft glow */
                 const glow = ctx.createRadialGradient(0, -s * 0.2, s * 0.05, 0, 0, s * 1.15);
                 glow.addColorStop(0, `hsla(${d.hue},${d.sat}%,82%,${d.alpha * 0.95})`);
                 glow.addColorStop(0.55, `hsla(${d.hue},${d.sat}%,${d.lit}%,${d.alpha * 0.5})`);
                 glow.addColorStop(1, `hsla(${d.hue},${d.sat}%,${d.lit}%,0)`);
 
-                /* Teardrop path */
                 ctx.beginPath();
                 ctx.moveTo(0, -s);
                 ctx.bezierCurveTo(s * 0.6, -s * 0.2, s * 0.85, s * 0.4, 0, s);
@@ -1520,7 +1750,6 @@
                 ctx.fillStyle = glow;
                 ctx.fill();
 
-                /* Inner shimmer highlight */
                 const shimmerA = (Math.sin(t * 0.04 + d.shimmer * 6) * 0.5 + 0.5) * d.alpha * 0.65;
                 const hl = ctx.createRadialGradient(-s * 0.2, -s * 0.35, 0, -s * 0.2, -s * 0.35, s * 0.5);
                 hl.addColorStop(0, `rgba(255,255,255,${shimmerA})`);
@@ -1532,7 +1761,6 @@
                 ctx.closePath();
                 ctx.fillStyle = hl;
                 ctx.fill();
-
                 ctx.restore();
             }
 
@@ -1544,11 +1772,9 @@
                     d.x += d.vx + Math.sin(t * 0.007 + d.phase) * 0.18;
                     d.y += d.vy;
                     d.phase += d.speed * 0.5;
-
                     if (d.y > H + d.baseSize * 2) { d.y = -d.baseSize * 2; d.x = Math.random() * W; }
                     if (d.x > W + 40) d.x = -40;
                     if (d.x < -40) d.x = W + 40;
-
                     drawDrop(d, t);
                 });
                 requestAnimationFrame(animate);
