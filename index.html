@@ -352,7 +352,7 @@
     <section id="home" class="hero-wrap">
 
         <div class="slide active" id="slide-0">
-            <video class="slide-media" autoplay muted loop playsinline preload="auto">
+            <video class="slide-media"muted loop playsinline preload="auto">
                 <source src="Water flowing video (No Audio).mp4" type="video/mp4">
             </video>
             <div class="slide-overlay"></div>
@@ -1741,21 +1741,36 @@
         let current = 0, autoTimer;
 
         function goToSlide(idx) {
-            slides[current].classList.remove('active');
-            dots[current].classList.remove('active');
+            const prev = current;
             current = (idx + slides.length) % slides.length;
+
+            // Deactivate previous slide
+            slides[prev].classList.remove('active');
+            dots[prev].classList.remove('active');
+
+            // Pause ALL videos first
+            slides.forEach(s => {
+                const v = s.querySelector('video');
+                if (v) { v.pause(); v.currentTime = 0; }
+            });
+
+            // Activate new slide
             slides[current].classList.add('active');
             dots[current].classList.add('active');
-            slides.forEach((s, i) => {
-                const v = s.querySelector('video');
-                if (!v) return;
-                if (i === current) { v.play().catch(() => { }); } else { v.pause(); }
-            });
+
+            // Play only the active slide's video
+            const activeVideo = slides[current].querySelector('video');
+            if (activeVideo) activeVideo.play().catch(() => { });
         }
 
         function nextSlide() { goToSlide(current + 1); }
         autoTimer = setInterval(nextSlide, 5500);
-        dots.forEach((d, i) => d.addEventListener('click', () => { clearInterval(autoTimer); goToSlide(i); autoTimer = setInterval(nextSlide, 5500); }));
+
+        dots.forEach((d, i) => d.addEventListener('click', () => {
+            clearInterval(autoTimer);
+            goToSlide(i);
+            autoTimer = setInterval(nextSlide, 5500);
+        }));
 
         /* ── COUNTER ── */
         let countersRun = false;
