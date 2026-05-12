@@ -352,7 +352,7 @@
     <section id="home" class="hero-wrap">
 
         <div class="slide active" id="slide-0">
-            <video class="slide-media"muted loop playsinline preload="auto">
+            <video class="slide-media" autoplay muted loop playsinline preload="auto">
                 <source src="Water flowing video (No Audio).mp4" type="video/mp4">
             </video>
             <div class="slide-overlay"></div>
@@ -406,7 +406,7 @@
         </div>
 
         <div class="slide" id="slide-2">
-            <video class="slide-media" muted loop playsinline preload="none">
+            <video class="slide-media" autoplay muted loop playsinline preload="none">
                 <source src="FREEDIO_ _Water pouring into glass slow motion_ royalty free HD stock video footage.mp4"
                     type="video/mp4">
             </video>
@@ -1740,27 +1740,44 @@
         const dots = Array.from(document.querySelectorAll('.slide-dot'));
         let current = 0, autoTimer;
 
+
         function goToSlide(idx) {
             const prev = current;
             current = (idx + slides.length) % slides.length;
 
-            // Deactivate previous slide
+            // Switch slide visibility
             slides[prev].classList.remove('active');
             dots[prev].classList.remove('active');
-
-            // Pause ALL videos first
-            slides.forEach(s => {
-                const v = s.querySelector('video');
-                if (v) { v.pause(); v.currentTime = 0; }
-            });
-
-            // Activate new slide
             slides[current].classList.add('active');
             dots[current].classList.add('active');
 
-            // Play only the active slide's video
-            const activeVideo = slides[current].querySelector('video');
-            if (activeVideo) activeVideo.play().catch(() => { });
+            // ── VIDEO CONTROL LOGIC ──
+
+            // ✅ Background videos (Slide 0 & 2): NEVER pause
+            ['bgVideo0', 'bgVideo2'].forEach(id => {
+                const video = document.getElementById(id);
+                if (video && video.paused) {
+                    video.play().catch(() => { });
+                }
+            });
+
+            // ❌ Normal videos (Slides 1, 3, 4): Pause when hidden, play when active
+            [1, 3, 4].forEach(slideIdx => {
+                const slide = document.getElementById(`slide-${slideIdx}`);
+                if (!slide) return;
+
+                const video = slide.querySelector('video');
+                if (!video) return;
+
+                if (slideIdx === current) {
+                    // Active slide: play video
+                    video.play().catch(() => { });
+                } else {
+                    // Hidden slide: pause and reset
+                    video.pause();
+                    video.currentTime = 0;
+                }
+            });
         }
 
         function nextSlide() { goToSlide(current + 1); }
@@ -1771,6 +1788,32 @@
             goToSlide(i);
             autoTimer = setInterval(nextSlide, 5500);
         }));
+
+        /* ── Play active slide video on load/hash navigation ── */
+        function playActiveVideo() {
+            const activeSlide = document.querySelector('.slide.active');
+            if (activeSlide) {
+                const video = activeSlide.querySelector('video');
+                if (video && !video.paused) return; // Already playing
+                if (video) video.play().catch(() => { }); // Silent fail for autoplay policies
+            }
+        }
+
+        // Run on initial load
+        window.addEventListener('load', playActiveVideo);
+
+        // Run when hash changes (e.g., clicking #home link from another page)
+        window.addEventListener('hashchange', () => {
+            if (location.hash === '#home' || location.hash === '') {
+                setTimeout(playActiveVideo, 100); // Small delay for DOM readiness
+            }
+        });
+
+        // Also trigger if user manually scrolls to #home section
+        document.querySelector('a[href="#home"]')?.addEventListener('click', () => {
+            setTimeout(playActiveVideo, 300);
+        });
+
 
         /* ── COUNTER ── */
         let countersRun = false;
